@@ -12,7 +12,6 @@ fetch("http://localhost:3000/api/products")
   .then(function (elements) {
     console.log(elements);
     // Boucle pour afficher chaque produits présent dans l'API.
-    let htmlTxt = "";
     for (let element of elements) {
       //Utilisation de la structure HTML utile pour l'affichage des produits. 
       console.log(element);
@@ -45,17 +44,16 @@ fetch("http://localhost:3000/api/products")
       p.textContent = `${element.description}`;
       // Balise "p" rattachée à son parent "article".
       article.appendChild(p);
-      //   htmlTxt += `<a href="./product.html?id=${element._id}">
-      //   <article>
-      //     <img src="${element.imageUrl}" alt="${element.altTxt}">
-      //     <h3 class="productName">${element.name}</h3>
-      //     <p class="productDescription">${element.description}</p>
-      //   </article>
-      // </a>`
     }
   })
   .catch(function (err) {
     /**** GESTION DES ERREURS ****/
     console.log("ERREUR", err);
     alert("ERREUR API");
+  })
+
+  .then(function (element) {
+    for (let p of searchParams){
+
+    }
   });
