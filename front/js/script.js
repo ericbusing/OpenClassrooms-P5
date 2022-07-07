@@ -1,4 +1,4 @@
-// Récupération des données sur l'API.
+// Recuperation des donnees sur l'API.
 fetch("http://localhost:3000/api/products")
   .then(function (response) {
     console.log(response);
@@ -8,52 +8,46 @@ fetch("http://localhost:3000/api/products")
     }
   })
 
-  // Exploitation des données.
+  // Exploitation des donnees.
   .then(function (elements) {
     console.log(elements);
-    // Boucle pour afficher chaque produits présent dans l'API.
+    // Boucle pour afficher chaque produits present dans l'API.
     for (let element of elements) {
       //Utilisation de la structure HTML utile pour l'affichage des produits. 
       console.log(element);
-      // Appel à l'élément parent.
+      // Appel a l'element parent.
       const items = document.getElementById("items");
-      // Création de la balise "a".
+      // Creation de la balise "a".
       let newElt = document.createElement("a");
       newElt.href = `./product.html?id=${element._id}`;
-      // Balise "a" rattachée à l'ID du parent "section".
+      // Balise "a" rattachee a l'ID du parent "section".
       items.appendChild(newElt);
-      // Création de la balise "article" contenant l'image, le nom et la description du produit.
+      // Creation de la balise "article" contenant l'image, le nom et la description du produit.
       let article = document.createElement("article");
-      // Balise "article" rattachée à son parent "a".
+      // Balise "article" rattachee a son parent "a".
       newElt.appendChild(article);
-      // Création de la balise "img" pour l'image du produit.
+      // Creation de la balise "img" pour l'image du produit.
       let image = document.createElement("img");
       image.src = `${element.imageUrl}`;
       image.alt = `${element.altTxt}`;
-      // Balise "img" rattachée à son parent "article".
+      // Balise "img" rattachee a son parent "article".
       article.appendChild(image);
-      // Création de la balise "h3" pour le nom du produit.
+      // Creation de la balise "h3" pour le nom du produit.
       let h3 = document.createElement("h3");
       h3.className = "productName";
       h3.textContent = `${element.name}`;
-      // Balise "h3" rattachée à son parent "article".
+      // Balise "h3" rattachee a son parent "article".
       article.appendChild(h3);
-      // Création de la balise "p" pour la description du produit.
+      // Creation de la balise "p" pour la description du produit.
       let p = document.createElement("p");
       p.className = "productDescription";
       p.textContent = `${element.description}`;
-      // Balise "p" rattachée à son parent "article".
+      // Balise "p" rattachee a son parent "article".
       article.appendChild(p);
     }
   })
   .catch(function (err) {
-    /**** GESTION DES ERREURS ****/
+    // Gestion des erreurs.
     console.log("ERREUR", err);
     alert("ERREUR API");
   })
-
-  .then(function (element) {
-    for (let p of searchParams){
-      URLSearchParams
-    }
-  });
