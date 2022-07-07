@@ -28,20 +28,20 @@ fetch("http://localhost:3000/api/products")
       newElt.appendChild(article);
       // Creation de la balise "img" pour l'image du produit.
       let image = document.createElement("img");
-      image.src = `${element.imageUrl}`;
-      image.alt = `${element.altTxt}`;
+      image.src = element.imageUrl;
+      image.alt = element.altTxt;
       // Balise "img" rattachee a son parent "article".
       article.appendChild(image);
       // Creation de la balise "h3" pour le nom du produit.
       let h3 = document.createElement("h3");
       h3.className = "productName";
-      h3.textContent = `${element.name}`;
+      h3.textContent = element.name;
       // Balise "h3" rattachee a son parent "article".
       article.appendChild(h3);
       // Creation de la balise "p" pour la description du produit.
       let p = document.createElement("p");
       p.className = "productDescription";
-      p.textContent = `${element.description}`;
+      p.textContent = element.description;
       // Balise "p" rattachee a son parent "article".
       article.appendChild(p);
     }
