@@ -8,9 +8,10 @@ console.log(id);
 const elementImage = document.getElementsByClassName("item__img");
 const elementName = document.getElementById("title");
 const elementPrice = document.getElementById("price");
-const elementDescription = document.getElementById("description")
+const elementDescription = document.getElementById("description");
+const elementColorChoice = document.getElementById("colors")
 
-function getElement() {
+const getElement = function () {
     // Recuperation des donnees sur l'API.
     // Ajout de l'ID sur l'URL.
     fetch(`http://localhost:3000/api/products/${id}`)
@@ -34,3 +35,18 @@ function getElement() {
 }
 
 getElement();
+
+const getColor = function () {
+    // Ajout du choix de couleur.
+    let colors = document.getElementById("colors");
+    // // Affichage des couleurs dans la console.
+    // console.log(colorChoice);
+    // Placement des couleurs dans la liste "Choisir une couleur".
+    // elementColorChoice.innerText = article.colors;
+    for (let color of colors) {
+        console.log(`La couleur du canapé est ${color}`);
+    }
+}
+
+getColor();
+
