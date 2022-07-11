@@ -1,11 +1,12 @@
 /**********VARIABLES**********/
 
 // Creation des variables.
-let elementImage = document.getElementsByClassName("item__img");
+// let elementImage = document.getElementsByClassName("item__img");
 let elementName = document.getElementById("title");
 let elementPrice = document.getElementById("price");
 let elementDescription = document.getElementById("description");
-let elementColorChoice = document.getElementById("colors")
+let elementColorChoice = document.getElementById("colors");
+let imageContainer = document.getElementById("item__img");
 
 /**********FONCTIONS**********/
 
@@ -39,28 +40,30 @@ const getElement = function (id) {
         .then(function (article) {
             // Affichage du produit voulu dans la console.
             console.log(article);
-            elementImage.src = article.imageUrl;
-            elementName.textContent = article.name;
-            elementPrice.textContent = article.price;
-            elementDescription.textContent = article.description;
             console.log(article.colors);
             setColorSelect(article.colors);
-            // console.log(article.article);
-            // setHTML(article.article);
+            setHTML(article);
         })
 }
 
 /**
- * 
- * 
+ * Ajout des details HTML du produit voulu.
+ * @param {string} 
  */
-// const setHTML = function (article) {
-//     // Placement des donnees API aux bons endroits.    
-//     elementImage.src = article.imageUrl;
-//     elementName.textContent = article.name;
-//     elementPrice.textContent = article.price;
-//     elementDescription.textContent = article.description;
-// }
+const setHTML = function (article) {
+    
+    // Placement des donnees API aux bons endroits.
+    let imageContainer = document.getElementsByTagName("div")[0];   
+    let image = document.createElement("img");
+    image.src = article.imageUrl;
+    image.alt = article.altTxt;
+    console.log(image);
+    imageContainer.appendChild(image);
+
+    elementName.textContent = article.name;
+    elementPrice.textContent = article.price;
+    elementDescription.textContent = article.description;
+}
 
 /** 
  * Ajout des couleurs dans la liste.
@@ -76,6 +79,26 @@ const setColorSelect = function (colors) {
         domColors.appendChild(option);
     }
 }
+
+/**********AJOUT PANIER**********/
+
+/**
+ * Fonction permettant d'ajouter une quantite et une couleur dans le panier.
+ */
+addToCart.onclick = function () {
+    // Cration d'un objet.
+    let kanap = {
+        idKanap : id.value,
+        quantityKanap : quantity.value,
+        colorKanap : colors.value
+    }
+    // On declare avec les paires de cle/valeur correspondant au nombre, a la couleur + objet(kanap).
+    localStorage.setItem(title.value, price.value, JSON.stringify(kanap));
+    // document.location.reload();
+}
+// On recupere les valeurs avec les cles.
+let kanapLocal = JSON.parse(localStorage.getItem("kanap"));
+localStorage.getItem(quantity.value, JSON.parse(kanapLocal));
 
 /**********EVENEMENTS**********/
 

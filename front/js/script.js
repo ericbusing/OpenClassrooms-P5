@@ -15,7 +15,7 @@ fetch("http://localhost:3000/api/products")
     for (let element of elements) {
       //Utilisation de la structure HTML utile pour l'affichage des produits. 
       console.log(element);
-      // Appel a l'element parent.
+      // Appel de l'element parent.
       const items = document.getElementById("items");
       // Creation de la balise "a".
       let newElt = document.createElement("a");
