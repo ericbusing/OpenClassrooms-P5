@@ -1,12 +1,11 @@
 /**********VARIABLES**********/
 
 // Creation des variables.
-// let elementImage = document.getElementsByClassName("item__img");
+let elementImage = document.querySelector(".item__img");
 let elementName = document.getElementById("title");
 let elementPrice = document.getElementById("price");
 let elementDescription = document.getElementById("description");
 let elementColorChoice = document.getElementById("colors");
-let imageContainer = document.getElementById("item__img");
 
 /**********FONCTIONS**********/
 
@@ -19,6 +18,8 @@ const getIdFromUrl = function () {
     let id = params.get("id");
     return id;
 }
+
+let id = getIdFromUrl();
 
 /** 
  * Recuperation des donnees sur l'API.
@@ -51,15 +52,13 @@ const getElement = function (id) {
  * @param {string} 
  */
 const setHTML = function (article) {
-    
-    // Placement des donnees API aux bons endroits.
-    let imageContainer = document.getElementsByTagName("div")[0];   
-    let image = document.createElement("img");
-    image.src = article.imageUrl;
-    image.alt = article.altTxt;
-    console.log(image);
-    imageContainer.appendChild(image);
 
+    // Placement des donnees API aux bons endroits. 
+    let imageContainer = document.createElement("img");
+    imageContainer.setAttribute("src", article.imageUrl);
+    imageContainer.setAttribute("alt", article.altTxt);
+    elementImage.appendChild(imageContainer);
+    console.log(imageContainer);
     elementName.textContent = article.name;
     elementPrice.textContent = article.price;
     elementDescription.textContent = article.description;
@@ -80,25 +79,110 @@ const setColorSelect = function (colors) {
     }
 }
 
-/**********AJOUT PANIER**********/
+/**********FONCTIONS PANIER **********/
 
 /**
- * Fonction permettant d'ajouter une quantite et une couleur dans le panier.
+ * Affichage du panier sous forme de string dans la console.
+ * @param {array} cart
  */
-addToCart.onclick = function () {
-    // Cration d'un objet.
-    let kanap = {
-        idKanap : id.value,
-        quantityKanap : quantity.value,
-        colorKanap : colors.value
-    }
-    // On declare avec les paires de cle/valeur correspondant au nombre, a la couleur + objet(kanap).
-    localStorage.setItem(title.value, price.value, JSON.stringify(kanap));
-    // document.location.reload();
+ function saveCart(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
 }
-// On recupere les valeurs avec les cles.
-let kanapLocal = JSON.parse(localStorage.getItem("kanap"));
-localStorage.getItem(quantity.value, JSON.parse(kanapLocal));
+
+/**
+ * Creation du panier et de sa condition si panier vide.
+ * @param {array} cart 
+ * @returns {json}
+ */
+function getCart() {
+    let cart = localStorage.getItem("cart");
+    if (cart == null) {
+        return [];
+    } else {
+        return JSON.parse(cart);
+    }
+}
+
+/**
+ * Recherhe si produit similaire, incrementer ce produit, sinon ajouter le produit.
+ * @param {string} product 
+ */
+function addToCart(product) {
+    let cart = getCart();
+    let foundProduct = cart.find(p => p.id == product.id);
+    if (foundProduct != undefined) {
+        foundProduct.quantity++;
+    } else {
+        product.quantity = 1;
+        cart.push(product);
+    }
+    saveCart(cart);
+}
+
+/**
+ * Possibilite de retirer un produit du panier.
+ * @param {string} product 
+ */
+function removeFromCart(product) {
+    let cart = getCart();
+    cart = cart.filter(p => p.id != product.id);
+    saveCart(cart);
+}
+
+/**
+ * Gerer la quantite des produits dans le panier.
+ * @param {string} product 
+ * @param {number} quantity 
+ */
+function changeQuantity(product, quantity) {
+    let cart = getCart();
+    let foundProduct = cart.find(p => p.id == product.id);
+    if (foundProduct != undefined) {
+        foundProduct.quantity += quantity;
+        if (foundProduct.quantity <= 0) {
+            removeFromCart(product);
+        } else {
+            saveCart(cart);
+        }
+    }
+}
+
+/**
+ * Donne le nombre total des produits dans le panier.
+ * @returns {number} "total des produits"
+ */
+function getNumberProduct() {
+    let cart = getCart();
+    let number = 0;
+    for (let product of cart) {
+        number += product.quantity;
+    }
+    return number;
+}
+
+/**
+ * Donne le prix total du panier.
+ * @returns {number} "prix total du panier"
+ */
+function getTotalPrice(){
+    let cart = getCart();
+    let total = 0;
+    for (let product of cart) {
+        total += product.quantity * product.price;
+    }
+    return total;
+}
+
+/**********AJOUT PANIER**********/
+
+addToCart.addEventListener("click", () => {
+    let productSelect = {
+        id: id,
+        quantity: quantity.value,
+        color: colors.value,
+        name: article.name
+    };
+});
 
 /**********EVENEMENTS**********/
 
@@ -106,4 +190,3 @@ localStorage.getItem(quantity.value, JSON.parse(kanapLocal));
 let productId = getIdFromUrl();
 console.log(productId);
 let productElement = getElement(productId);
-console.log(productElement);
