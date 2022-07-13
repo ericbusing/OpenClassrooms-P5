@@ -5,7 +5,8 @@ let elementImage = document.querySelector(".item__img");
 let elementName = document.getElementById("title");
 let elementPrice = document.getElementById("price");
 let elementDescription = document.getElementById("description");
-let elementColorChoice = document.getElementById("colors");
+let elementCart = document.getElementById("addToCart");
+let id = getIdFromUrl();
 
 /**********FONCTIONS**********/
 
@@ -13,13 +14,11 @@ let elementColorChoice = document.getElementById("colors");
  * Recuperation de l'ID.
  * @return {id} identifiant du produit voulu.
  */
-const getIdFromUrl = function () {
+function getIdFromUrl() {
     let params = new URL(document.location).searchParams;
     let id = params.get("id");
     return id;
 }
-
-let id = getIdFromUrl();
 
 /** 
  * Recuperation des donnees sur l'API.
@@ -85,7 +84,8 @@ const setColorSelect = function (colors) {
  * Affichage du panier sous forme de string dans la console.
  * @param {array} cart
  */
- function saveCart(cart) {
+function saveCart(cart) {
+    // Serialisation de cart en chaine de caractere.
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
@@ -95,7 +95,9 @@ const setColorSelect = function (colors) {
  * @returns {json}
  */
 function getCart() {
+    // Recuperation de l'item cart.
     let cart = localStorage.getItem("cart");
+    // Creation d'un tableau si le panier est vide.
     if (cart == null) {
         return [];
     } else {
@@ -109,82 +111,39 @@ function getCart() {
  */
 function addToCart(product) {
     let cart = getCart();
-    let foundProduct = cart.find(p => p.id == product.id);
-    if (foundProduct != undefined) {
-        foundProduct.quantity++;
-    } else {
-        product.quantity = 1;
-        cart.push(product);
-    }
-    saveCart(cart);
-}
-
-/**
- * Possibilite de retirer un produit du panier.
- * @param {string} product 
- */
-function removeFromCart(product) {
-    let cart = getCart();
-    cart = cart.filter(p => p.id != product.id);
-    saveCart(cart);
-}
-
-/**
- * Gerer la quantite des produits dans le panier.
- * @param {string} product 
- * @param {number} quantity 
- */
-function changeQuantity(product, quantity) {
-    let cart = getCart();
-    let foundProduct = cart.find(p => p.id == product.id);
-    if (foundProduct != undefined) {
-        foundProduct.quantity += quantity;
-        if (foundProduct.quantity <= 0) {
-            removeFromCart(product);
+    for (let i in cart) {
+        const productInCart = cart[i];
+        // Comparaison de l'id et de la couleur entre le panier et le produit ajoute.
+        if (product.id === productInCart.id && product.colors === productInCart.colors) {
+            // Incrementation en cas de meme id et de meme couleur.
+            productInCart.quantity === product.quantity + productInCart.quantity;
         } else {
-            saveCart(cart);
+            // Ajouter a cart.
+            cart.push(product);
         }
     }
+    saveCart(cart);
+    return;
 }
 
-/**
- * Donne le nombre total des produits dans le panier.
- * @returns {number} "total des produits"
- */
-function getNumberProduct() {
-    let cart = getCart();
-    let number = 0;
-    for (let product of cart) {
-        number += product.quantity;
-    }
-    return number;
-}
-
-/**
- * Donne le prix total du panier.
- * @returns {number} "prix total du panier"
- */
-function getTotalPrice(){
-    let cart = getCart();
-    let total = 0;
-    for (let product of cart) {
-        total += product.quantity * product.price;
-    }
-    return total;
-}
+/**********EVENEMENTS**********/
 
 /**********AJOUT PANIER**********/
 
-addToCart.addEventListener("click", () => {
-    let productSelect = {
+/**
+ * Evenement au clic sur le bouton "addToCart".
+ */
+elementCart.addEventListener("click", () => {
+    // Creation de l'objet contenant les cles/valeurs necessaire.
+    let product = {
         id: id,
-        quantity: quantity.value,
+        quantity: parseInt(quantity.value),
         color: colors.value,
-        name: article.name
     };
+    console.log(product);
+    // Appel de la fonction afin de rattacher l'evenement au localStorage.
+    addToCart(product);
 });
-
-/**********EVENEMENTS**********/
 
 // Chargement de page
 let productId = getIdFromUrl();
