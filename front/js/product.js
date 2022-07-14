@@ -85,7 +85,7 @@ const setColorSelect = function (colors) {
  * @param {array} cart
  */
 function saveCart(cart) {
-    // Serialisation de cart en chaine de caractere.
+    // LocalStorage definit et serialisation de cart en chaine de caractere.
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
@@ -106,58 +106,67 @@ function getCart() {
 }
 
 /**
- * Recherhe si produit similaire, incrementer ce produit, sinon ajouter le produit.
+ * Recherche si produit similaire, incrementer ce produit, sinon ajouter le produit.
  * @param {string} product 
+ * @returns {array} Tableau contenant l'id, la couleur et la quantite.
  */
-function addToCart(article) {
+function addToCart(product) {
     let cart = getCart();
-    for (let i of cart) {
+    for (let i in cart) {
         const productInCart = cart[i];
         // Comparaison de l'id et de la couleur entre le panier et le produit ajoute.
-        if (productInCart.id === article.id && productInCart.colors === article.colors) {
+        if (productInCart.id === product.id && productInCart.color === product.color) {
             // Incrementation en cas de meme id et de meme couleur.
-            productInCart.quantity === article.quantity + productInCart.quantity;
+            productInCart.quantity = product.quantity + productInCart.quantity;
+            // Appel de la fonction du localStorage.
             saveCart(cart);
+            // Retourne le produit incremente.
             return;
-        } else {
-            // Ajouter a cart.
-            cart.push(article);
         }
     }
+    cart.push(product);
+    // Appel de la fonction du localStorage.
     saveCart(cart);
     return;
 }
 
 /**********EVENEMENTS**********/
 
-/**********AJOUT PANIER**********/
+/**********AJOUT AU PANIER**********/
 
 /**
  * Evenement au clic sur le bouton "addToCart".
  */
-function listenElementCart () {
-    
+function listenElementCart() {
+    // Methode d'ecoute de la variable elementCart (ou addToCart).
     elementCart.addEventListener("click", () => {
         // Creation de l'objet contenant les cles/valeurs necessaire.
         let product = {
             id: id,
+            // Permet de renvoyer le premier argument en string.
             quantity: parseInt(quantity.value),
             color: colors.value,
         };
+        if (product.color == []) {
+            window.confirm("Merci de séléctionner une couleur.")
+        }
         // Appel de la fonction afin de rattacher l'evenement au localStorage.
         addToCart(product);
         console.log(product);
     });
 }
 
-// Chargement de page
+// Chargement de page.
 let productId = getIdFromUrl();
 console.log(productId);
 let productElement = getElement(productId);
 
-async function main (){
-
+// Creation d'une fonction asynchrone.
+async function main() {
+    // Appel de la fonction du fetch.
+    await getElement();
+    // Appel de la fonction d'action sur le bouton "Ajouter au panier".
     listenElementCart();
 }
-
+// Appel de la fonction asynchrone.
 main();
