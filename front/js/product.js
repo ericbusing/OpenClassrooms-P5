@@ -147,14 +147,25 @@ function listenElementCart() {
             quantity: parseInt(quantity.value),
             color: colors.value,
         };
-        if (product.color == []) {
-            window.confirm("Merci de séléctionner une couleur.")
-        }
         // Appel de la fonction afin de rattacher l'evenement au localStorage.
         addToCart(product);
         console.log(product);
+        verifyOrder(product);
     });
 }
+
+/**
+ * Fonction pour verifier si une couleur a bien ete selectionnee.
+ * @param {string} product 
+ * @returns {alert} Un message d'alerte s'affiche dans le cas ou la couleur n'est pas selectionnee.
+ */
+function verifyOrder(product) {
+    // Condition si la couleur n'est pas choisie.
+    if (product.color == []) {
+        window.confirm("Merci de séléctionner une couleur.");
+    }
+}
+
 
 // Chargement de page.
 let productId = getIdFromUrl();
