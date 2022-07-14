@@ -109,18 +109,19 @@ function getCart() {
  * Recherhe si produit similaire, incrementer ce produit, sinon ajouter le produit.
  * @param {string} product 
  */
-function addToCart(product) {
+function addToCart(article) {
     let cart = getCart();
-    for (let i in cart) {
+    for (let i of cart) {
         const productInCart = cart[i];
         // Comparaison de l'id et de la couleur entre le panier et le produit ajoute.
-        if (product.id === productInCart.id && product.colors === productInCart.colors) {
+        if (productInCart.id === article.id && productInCart.colors === article.colors) {
             // Incrementation en cas de meme id et de meme couleur.
-            productInCart.quantity === product.quantity + productInCart.quantity;
-            localStorage.setItem("cart");
+            productInCart.quantity === article.quantity + productInCart.quantity;
+            saveCart(cart);
+            return;
         } else {
             // Ajouter a cart.
-            cart.push(product);
+            cart.push(article);
         }
     }
     saveCart(cart);
@@ -134,19 +135,29 @@ function addToCart(product) {
 /**
  * Evenement au clic sur le bouton "addToCart".
  */
-elementCart.addEventListener("click", () => {
-    // Creation de l'objet contenant les cles/valeurs necessaire.
-    let product = {
-        id: id,
-        quantity: parseInt(quantity.value),
-        color: colors.value,
-    };
-    console.log(product);
-    // Appel de la fonction afin de rattacher l'evenement au localStorage.
-    addToCart(product);
-});
+function listenElementCart () {
+    
+    elementCart.addEventListener("click", () => {
+        // Creation de l'objet contenant les cles/valeurs necessaire.
+        let product = {
+            id: id,
+            quantity: parseInt(quantity.value),
+            color: colors.value,
+        };
+        // Appel de la fonction afin de rattacher l'evenement au localStorage.
+        addToCart(product);
+        console.log(product);
+    });
+}
 
 // Chargement de page
 let productId = getIdFromUrl();
 console.log(productId);
 let productElement = getElement(productId);
+
+async function main (){
+
+    listenElementCart();
+}
+
+main();
