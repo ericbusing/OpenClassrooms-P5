@@ -117,6 +117,7 @@ function addToCart(product) {
         if (product.id === productInCart.id && product.colors === productInCart.colors) {
             // Incrementation en cas de meme id et de meme couleur.
             productInCart.quantity === product.quantity + productInCart.quantity;
+            localStorage.setItem("cart");
         } else {
             // Ajouter a cart.
             cart.push(product);

@@ -1,8 +1,12 @@
+
+/**********FONCTIONS**********/
+
 /**
  * Possibilite de retirer un produit du panier.
  * @param {string} product 
  */
- function removeFromCart(product) {
+function removeFromCart(product) {
+    // Variable localStorage.
     let cart = getCart();
     cart = cart.filter(p => p.id != product.id);
     saveCart(cart);
@@ -14,6 +18,7 @@
  * @param {number} quantity 
  */
 function changeQuantity(product, quantity) {
+    // Variable localStorage.
     let cart = getCart();
     let foundProduct = cart.find(p => p.id == product.id);
     if (foundProduct != undefined) {
@@ -31,6 +36,7 @@ function changeQuantity(product, quantity) {
  * @returns {number} "total des produits"
  */
 function getNumberProduct() {
+    // Variable localStorage.
     let cart = getCart();
     let number = 0;
     for (let product of cart) {
@@ -44,6 +50,7 @@ function getNumberProduct() {
  * @returns {number} "prix total du panier"
  */
 function getTotalPrice() {
+    // Variable localStorage.
     let cart = getCart();
     let total = 0;
     for (let product of cart) {
