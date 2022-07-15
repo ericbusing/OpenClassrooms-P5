@@ -1,10 +1,10 @@
 /**********FONCTIONS**********/
 
 // Recuperation du LS.
-// let cart = JSON.parse(localStorage.getItem("cart"));
+let cart = JSON.parse(localStorage.getItem("cart"));
 
 // Triage du LS.
-// cart.sort
+cart.sort
 
 /** 
  * Recuperation des donnees sur l'API.
