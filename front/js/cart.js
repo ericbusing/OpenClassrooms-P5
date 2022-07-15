@@ -1,6 +1,46 @@
-
-
 /**********FONCTIONS**********/
+
+// Recuperation du LS.
+// let cart = JSON.parse(localStorage.getItem("cart"));
+
+// Triage du LS.
+// cart.sort
+
+/** 
+ * Recuperation des donnees sur l'API.
+ * @param {string} "identifiant du produit"
+ * @return {json}
+*/
+const getElement = function (id) {
+
+    // Ajout de l'ID sur l'URL.
+    fetch(`http://localhost:3000/api/products/${id}`)
+        .then(function (response) {
+            console.log(response);
+            // Utilisation d'une condition pour l'affichage de la reponse dans la console.
+            if (response.ok) {
+                return response.json();
+            }
+        })
+}
+
+/********CREATION DES ELEMENTS DANS LA PAGE PANIER**********/
+
+/**
+ * Creation affichage panier.
+ */
+function displayCart(){
+    for(let articleInCart of cart) {
+        console.log(articleInCart);
+        // Appel de l'element parent.
+        const section = document.getElementById("cart__items");
+        // Creation d'article.
+        let article = document.createElement("article");
+        // article = 
+        section.appendChild(article);
+    }
+}
+
 
 /**
  * Possibilite de retirer un produit du panier.

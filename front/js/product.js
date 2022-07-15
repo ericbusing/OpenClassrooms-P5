@@ -147,37 +147,57 @@ function listenElementCart() {
             quantity: parseInt(quantity.value),
             color: colors.value,
         };
-        // Appel de la fonction afin de rattacher l'evenement au localStorage.
-        addToCart(product);
+        // Condition de check si les fonctions de quantite et de couleur fonctionne bien.
+        if (checkQuantity() && checkColor()) {
+            console.log("Commande passée !");
+            addToCart(product);
+        };
         console.log(product);
-        verifyOrder(product);
     });
 }
 
 /**
- * Fonction pour verifier si une couleur a bien ete selectionnee.
- * @param {string} product 
- * @returns {alert} Un message d'alerte s'affiche dans le cas ou la couleur n'est pas selectionnee.
+ * Fonction pour verifier si la couleur est bien selectionnee.
+ * @returns {boolean}
  */
-function verifyOrder(product) {
-    // Condition si la couleur n'est pas choisie.
-    if (product.color == []) {
-        window.confirm("Merci de séléctionner une couleur.");
+function checkColor() {
+    // Recuperer la valeur des couleurs saisie par l'utilisateur.
+    let colorOrder = document.getElementById("colors").value;
+    console.log(colorOrder);
+    // Si la couleur contient plus de 0 caracteres.
+    if (colorOrder > [0]) {
+        console.log("Couleur ok");
+        // Valider la commande.
+        return true;
+        // Sinon ne pas valider et afficher un message d'erreur.
+    } else {
+        alert("Veuillez séléctionner une couleur.");
+        return false;
     }
 }
 
+/**
+ * Fonction pour verifier si la quantite est bien selectionnee.
+ * @returns {boolean}
+ */
+function checkQuantity() {
+    // Recuperer la valeur de la quantite saisie par l'utilisateur.
+    let quantityOrder = document.getElementById("quantity").value;
+    console.log(quantityOrder);
+    // Si la quantite saisie se trouve entre 1 et 100.
+    if (quantityOrder > 0 && quantityOrder < 100) {
+        console.log("Quantité ok");
+        // Valider la commande.
+        return true;
+        // Sinon ne pas valider et afficher un message d'erreur.
+    } else {
+        alert("Veuillez saisir une quantité entre 1 et 100.");
+        return false;
+    }
+}
 
 // Chargement de page.
 let productId = getIdFromUrl();
 console.log(productId);
 let productElement = getElement(productId);
-
-// Creation d'une fonction asynchrone.
-async function main() {
-    // Appel de la fonction du fetch.
-    await getElement();
-    // Appel de la fonction d'action sur le bouton "Ajouter au panier".
-    listenElementCart();
-}
-// Appel de la fonction asynchrone.
-main();
+let productCart = listenElementCart();
