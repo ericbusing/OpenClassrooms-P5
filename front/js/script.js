@@ -46,6 +46,7 @@ fetch("http://localhost:3000/api/products")
       article.appendChild(p);
     }
   })
+  
   .catch(function (err) {
     // Gestion des erreurs.
     console.log("ERREUR", err);

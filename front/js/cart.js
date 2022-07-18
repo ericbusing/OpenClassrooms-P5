@@ -1,46 +1,93 @@
 /**********FONCTIONS**********/
 
 // Recuperation du LS.
-let cart = JSON.parse(localStorage.getItem("cart"));
+let cart;
+function getLS() {
+    cart = JSON.parse(localStorage.getItem("cart"));
+    console.log(cart);
+}
 
-// Triage du LS.
-cart.sort
+getLS();
 
 /** 
  * Recuperation des donnees sur l'API.
  * @param {string} "identifiant du produit"
  * @return {json}
 */
-const getElement = function (id) {
+let article;
+async function getElement() {
 
     // Ajout de l'ID sur l'URL.
-    fetch(`http://localhost:3000/api/products/${id}`)
-        .then(function (response) {
-            console.log(response);
-            // Utilisation d'une condition pour l'affichage de la reponse dans la console.
-            if (response.ok) {
-                return response.json();
-            }
+    await fetch(`http://localhost:3000/api/products`)
+        .then(res => res.json())
+        .then(json => article = json)
+
+        .catch(function (err) {
+            // Gestion des erreurs.
+            console.log("ERREUR", err);
+            alert("ERREUR API");
         })
+    console.log("ici", article);
 }
+
+// point de comparaison LS/fetch
+
+// Avec un filter.
 
 /********CREATION DES ELEMENTS DANS LA PAGE PANIER**********/
 
 /**
  * Creation affichage panier.
  */
-function displayCart(){
-    for(let articleInCart of cart) {
-        console.log(articleInCart);
-        // Appel de l'element parent.
-        const section = document.getElementById("cart__items");
-        // Creation d'article.
-        let article = document.createElement("article");
-        // article = 
-        section.appendChild(article);
+ function displayCart() {
+    article = getElement();
+
+    // for (let articleInCart in cart) {
+    for (let i = 0; i < cart.length; i++) {
+        for (let j = 0; j < article.length; j++) {
+            console.log(cart.length);
+            // Appel de l'element parent.
+            const section = document.getElementById("cart__items");
+            // Creation d'article.
+            let article = document.createElement("article");
+            // Article rattache à son element parent.
+            section.appendChild(article);
+            console.log(section);
+            // Creation de la div contenant l'img.
+            let div = document.createElement("div");
+            article.appendChild(div);
+            console.log(div);
+
+            let image = document.createElement("img");
+            image.setAttribute("src", article[j].imageUrl);
+            image.setAttribute("alt", article[j].altTxt);
+            div.appendChild(image);
+            console.log(image);
+
+            let divContent = document.createElement("div");
+            article.appendChild(divContent);
+
+            let descriptionContent = document.createElement("div");
+            divContent.appendChild(descriptionContent);
+
+            let title = document.createElement("h2");
+            title.textContent = cart[i].name;
+            descriptionContent.appendChild(title);
+
+            let color = document.createElement("p");
+            // color = cart[i].color;
+            // descriptionContent.appendChild(color);
+            color.innerHTML = cart[i].colors;
+
+            let price = document.createElement("p");
+            price.innerHTML = cart[i].price;
+            // descriptionContent.appendChild(price);
+        }
     }
 }
-
+// }
+// getElement();
+displayCart();
 
 /**
  * Possibilite de retirer un produit du panier.
