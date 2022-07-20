@@ -1,93 +1,120 @@
+let article;
+const fetchProducts = async function() {
+    await fetch('http://localhost:3000/api/products') // on va chercher l'API avec la methode fetch.
+    .then(res => res.json())
+    .then(json => article = json) // Creation d'une promesse en renvoyant la réponse au format JSON. Puis definition d'un parametre pour products en reutilisant .then.
+    .catch((error) => console.error(error));
+}
+
+let cart = JSON.parse(localStorage.getItem("cart")); // Recuperation du LS.
+console.log(cart);
+
+
+
 /**********FONCTIONS**********/
 
-// Recuperation du LS.
-let cart;
-function getLS() {
-    cart = JSON.parse(localStorage.getItem("cart"));
-    console.log(cart);
-}
-
-getLS();
-
-/** 
- * Recuperation des donnees sur l'API.
- * @param {string} "identifiant du produit"
- * @return {json}
-*/
-let article;
-async function getElement() {
-
-    // Ajout de l'ID sur l'URL.
-    await fetch(`http://localhost:3000/api/products`)
-        .then(res => res.json())
-        .then(json => article = json)
-
-        .catch(function (err) {
-            // Gestion des erreurs.
-            console.log("ERREUR", err);
-            alert("ERREUR API");
-        })
-    console.log("ici", article);
-}
-
-// point de comparaison LS/fetch
-
-// Avec un filter.
-
-/********CREATION DES ELEMENTS DANS LA PAGE PANIER**********/
+/**
+ * Fonction pour s'assurer de bien recuperer addToCart.
+ */
+const cartDisplay = () => {
+    if (cart) { // addToCart est bien recupere.
+        cart;
+    }
+};
+cartDisplay();
 
 /**
- * Creation affichage panier.
+ * Fonction pour afficher les elements presents dans le panier.
  */
- function displayCart() {
-    article = getElement();
-
-    // for (let articleInCart in cart) {
+const showProducts = async function() {
+    await fetchProducts()
+    // Affichage des produits.
     for (let i = 0; i < cart.length; i++) {
-        for (let j = 0; j < article.length; j++) {
-            console.log(cart.length);
-            // Appel de l'element parent.
-            const section = document.getElementById("cart__items");
-            // Creation d'article.
-            let article = document.createElement("article");
-            // Article rattache à son element parent.
-            section.appendChild(article);
-            console.log(section);
-            // Creation de la div contenant l'img.
-            let div = document.createElement("div");
-            article.appendChild(div);
-            console.log(div);
 
-            let image = document.createElement("img");
-            image.setAttribute("src", article[j].imageUrl);
-            image.setAttribute("alt", article[j].altTxt);
-            div.appendChild(image);
-            console.log(image);
+        let cartItems = document.getElementById("cart__items");
 
-            let divContent = document.createElement("div");
-            article.appendChild(divContent);
+        // Ajout de l'element article.
+        let cartArticles = document.createElement("article");
+        cartItems.appendChild(cartArticles);
+        cartArticles.setAttribute("data-id", cart[i].id);
+        cartArticles.setAttribute("data-color", cart[i].colors)
+        cartArticles.className = "cart__item";
 
-            let descriptionContent = document.createElement("div");
-            divContent.appendChild(descriptionContent);
+        // Ajout de l'element div qui va contenir l'img.
+        let divCartImages = document.createElement("div");
+        divCartImages.className = "cart__item__img";
+        cartArticles.appendChild(divCartImages);
 
-            let title = document.createElement("h2");
-            title.textContent = cart[i].name;
-            descriptionContent.appendChild(title);
+        // Ajout de l'élement img.
+        let cartImages = document.createElement("img");
+        cartImages.setAttribute('src', article[i].imageUrl);
+        cartImages.setAttribute('alt', article[i].altTxt);
+        divCartImages.appendChild(cartImages);
 
-            let color = document.createElement("p");
-            // color = cart[i].color;
-            // descriptionContent.appendChild(color);
-            color.innerHTML = cart[i].colors;
+        // Ajout d'une div.
+        let divCartItems = document.createElement("div");
+        divCartItems.className = "cart__item__content";
+        cartArticles.appendChild(divCartItems);
 
-            let price = document.createElement("p");
-            price.innerHTML = cart[i].price;
-            // descriptionContent.appendChild(price);
-        }
+        // Ajout d'une div.
+        let divCartItemsDescription = document.createElement("div");
+        divCartItemsDescription.className = "cart__item__content__description";
+        divCartItems.appendChild(divCartItemsDescription);
+
+        // Ajout du h2 qui va contenir le nom du produit.
+        let divCartItemsDescriptionName = document.createElement("h2");
+        divCartItemsDescription.appendChild(divCartItemsDescriptionName);
+        divCartItemsDescriptionName.innerHTML = article[i].name;
+
+        // Ajout d'un p qui va contenir la couleur du produit.
+        let divCartItemsDescriptionColor = document.createElement("p");
+        divCartItemsDescription.appendChild(divCartItemsDescriptionColor);
+        divCartItemsDescriptionColor.innerHTML = cart[i].color;
+
+        // Ajout d'un p qui va contenir le prix du produit.
+        let divCartItemsDescriptionPrice = document.createElement("p");
+        divCartItemsDescription.appendChild(divCartItemsDescriptionPrice);
+        divCartItemsDescriptionPrice.innerHTML = article[i].price + " €"; // Ici le prix a été récupéré de l'api directement.
+
+        // Ajout d'une div.    
+        let divCartItemsSetting = document.createElement("div");
+        divCartItemsSetting.className = "cart__item__content__settings";
+        divCartItems.appendChild(divCartItemsSetting);
+
+        // Ajout d'une div.
+        let divCartItemsSettingQuantity = document.createElement("div");
+        divCartItemsSettingQuantity.className = "cart__item__content__settings__quantity";
+        divCartItemsSetting.appendChild(divCartItemsSettingQuantity);
+
+        // Ajout d'un p qui va contenir le mot "Qté :".
+        let divCartItemsSettingQty = document.createElement("p");
+        divCartItemsSettingQuantity.appendChild(divCartItemsSettingQty);
+        divCartItemsSettingQty.innerHTML = "Qté : ";
+
+        // Ajout de l'input qui va contenir la quantité.
+        let inputQuantity = document.createElement("input");
+        divCartItemsSettingQuantity.appendChild(inputQuantity);
+        inputQuantity.value = cart[i].quantity;
+        inputQuantity.className = "itemQuantity";
+        inputQuantity.setAttribute("type", "number");
+        inputQuantity.setAttribute("min", "1");
+        inputQuantity.setAttribute("max", "100");
+        inputQuantity.setAttribute("name", "itemQuantity");
+
+        // Ajout d'une div.
+        let divCartItemsDelete = document.createElement("div");
+        divCartItemsDelete.className = "cart__item__content__settings__delete";
+        divCartItems.appendChild(divCartItemsDelete);
+
+        // Ajout d'un p qui va contenir le bouton "Supprimer".   
+        let pDeleteItem = document.createElement("p");
+        pDeleteItem.className = "deleteItem";
+        divCartItemsDelete.appendChild(pDeleteItem);
+        pDeleteItem.innerHTML = "Supprimer";
     }
 }
-// }
-// getElement();
-displayCart();
+
+showProducts();
 
 /**
  * Possibilite de retirer un produit du panier.
