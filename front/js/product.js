@@ -134,10 +134,6 @@ function addToCart(product) {
     return;
 }
 
-/**********EVENEMENTS**********/
-
-/**********AJOUT AU PANIER**********/
-
 /**
  * Evenement au clic sur le bouton "addToCart".
  */

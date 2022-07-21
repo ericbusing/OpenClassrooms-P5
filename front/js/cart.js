@@ -2,7 +2,7 @@
 
 let cart = JSON.parse(localStorage.getItem("cart")); // on recupere ce qu'il y a dans le local storage
 console.log(cart);
-
+let cartItems = document.getElementById("cart__items");
 
 /**********FONCTIONS**********/
 
@@ -17,16 +17,19 @@ const fetchProducts = () => {
         .catch((error) => console.error(error));
 }
 
+
+// construire l'array global
+const globalArray = function() {
+    
+}
+
 /**
  * 
  * @param {*} products 
  * @param {*} articleToShow 
  */
+// Supprimer les 2 propriétés et mettre globalArray
 const showProducts = async (products, articleToShow) => {
-
-    // Affichage des produits
-
-    let cartItems = document.getElementById("cart__items");
 
     // on ajoute l'element article
     let cartArticles = document.createElement("article");
@@ -60,17 +63,17 @@ const showProducts = async (products, articleToShow) => {
     // ajout du h2 qui va contenir le nom du produit
     let divCartItemsDescriptionName = document.createElement("h2");
     divCartItemsDescription.appendChild(divCartItemsDescriptionName);
-    divCartItemsDescriptionName.innerHTML = products.name;
+    divCartItemsDescriptionName.textContent = products.name;
 
     // ajout d'un p qui va contenir la couleur du produit
     let divCartItemsDescriptionColor = document.createElement("p");
     divCartItemsDescription.appendChild(divCartItemsDescriptionColor);
-    divCartItemsDescriptionColor.innerHTML = articleToShow.color;
+    divCartItemsDescriptionColor.textContent = articleToShow.color;
 
     // ajout d'un p qui va contenir le prix du produit
     let divCartItemsDescriptionPrice = document.createElement("p");
     divCartItemsDescription.appendChild(divCartItemsDescriptionPrice);
-    divCartItemsDescriptionPrice.innerHTML = products.price + " €"; // ici le prix a été récupéré de l'api directement
+    divCartItemsDescriptionPrice.textContent = products.price + " €"; // ici le prix a été récupéré de l'api directement
 
     // ajout d'une div    
     let divCartItemsSetting = document.createElement("div");
@@ -85,7 +88,7 @@ const showProducts = async (products, articleToShow) => {
     // ajout d'un p qui va contenir le mot "Qté :" 
     let divCartItemsSettingQty = document.createElement("p");
     divCartItemsSettingQuantity.appendChild(divCartItemsSettingQty);
-    divCartItemsSettingQty.innerHTML = "Qté : ";
+    divCartItemsSettingQty.textContent = "Qté : ";
 
     // ajout de l'input qui va contenir la quantité 
     let inputQuantity = document.createElement("input");
@@ -106,7 +109,7 @@ const showProducts = async (products, articleToShow) => {
     let pDeleteItem = document.createElement("p");
     pDeleteItem.className = "deleteItem";
     divCartItemsDelete.appendChild(pDeleteItem);
-    pDeleteItem.innerHTML = "Supprimer";
+    pDeleteItem.textContent = "Supprimer";
 }
 
 /**
@@ -117,7 +120,7 @@ async function displayAllProducts() {
     const products = await fetchProducts();
     console.log(products);
     let cart = JSON.parse(localStorage.getItem("cart"));
-
+    // Remplacer cart par globalArray et supprimer la ligne const product.
     for (let articleToShow of cart) {
         const product = products.filter(p => p._id === articleToShow.id)
         showProducts(product[0], articleToShow);
@@ -133,22 +136,6 @@ async function main() {
     await displayAllProducts();
 }
 main();
-
-/**
- * Possibilite de retirer un produit du panier.
- * @param {string} product 
- */
-function deleteItem(){
-    cart = cart.filter(p => p.id != product.id);
-}
-// function listenDeleteItem() {
-
-//     // cart = cart.filter(pDeleteItem => pDeleteItem.id != article.id);
-//     // saveCart(cart);
-//     pDeleteItem.addEventListener("click", function () {
-
-//     });
-// }
 
 /**
  * Gerer la quantite des produits dans le panier.
@@ -193,3 +180,19 @@ function getTotalPrice() {
     }
     return total;
 }
+
+/**
+ * Possibilite de retirer un produit du panier.
+ * @param {string} product 
+ */
+ function deleteItem(){
+    cart = cart.filter(p => p.id != product.id);
+}
+// function listenDeleteItem() {
+
+//     // cart = cart.filter(pDeleteItem => pDeleteItem.id != article.id);
+//     // saveCart(cart);
+//     pDeleteItem.addEventListener("click", function () {
+
+//     });
+// }
