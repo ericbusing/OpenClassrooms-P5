@@ -63,12 +63,12 @@ const setHTML = function (article) {
     elementDescription.textContent = article.description;
 }
 
+let domColors = document.getElementById("colors");
 /** 
  * Ajout des couleurs dans la liste.
  * @param {array}
 */
 const setColorSelect = function (colors) {
-    let domColors = document.getElementById("colors");
     // Affichage des couleurs dans la console.
     console.log(domColors);
     for (let color of colors) {
@@ -120,6 +120,8 @@ function addToCart(product) {
             productInCart.quantity = product.quantity + productInCart.quantity;
             // Appel de la fonction du localStorage.
             saveCart(cart);
+            // Ajout d'une fenetre pop up signalant que le produit a ete ajoute au panier.
+            alert("Votre sélection est ajoutée dans votre panier !")
             // Retourne le produit incremente.
             return;
         }
@@ -127,6 +129,8 @@ function addToCart(product) {
     cart.push(product);
     // Appel de la fonction du localStorage.
     saveCart(cart);
+    // Ajout d'une fenetre pop up signalant que le produit a ete ajoute au panier.
+    alert("Votre sélection est ajoutée dans votre panier !")
     return;
 }
 
@@ -139,7 +143,7 @@ function addToCart(product) {
  */
 function listenElementCart() {
     // Methode d'ecoute de la variable elementCart (ou addToCart).
-    elementCart.addEventListener("click", () => {
+    elementCart.addEventListener("click", function () {
         // Creation de l'objet contenant les cles/valeurs necessaire.
         let product = {
             id: id,
