@@ -7,28 +7,22 @@ let cartItems = document.getElementById("cart__items");
 /**********FONCTIONS**********/
 
 /**
- * 
- * @returns 
+ * Fonction pour recuperer l'API.
+ * @returns {array}
  */
 const fetchProducts = () => {
     return fetch('http://localhost:3000/api/products') // on va chercher l'API avec la methode fetch 
-        .then(res => res.json())
-        .then(data => data) // on fait une promesse en renvoyant la réponse au format JSON. // on définit un paramètre pour products en réutilisant .then 
-        .catch((error) => console.error(error));
-}
-
-
-// construire l'array global
-const globalArray = function() {
-    
+    .then(res => res.json())
+    .then(data => data) // on fait une promesse en renvoyant la réponse au format JSON. // on définit un paramètre pour products en réutilisant .then 
+    .catch((error) => console.error(error));
 }
 
 /**
- * 
+ * Fonction pour creer les elements du DOM manquants.
  * @param {*} products 
  * @param {*} articleToShow 
  */
-// Supprimer les 2 propriétés et mettre globalArray
+
 const showProducts = async (products, articleToShow) => {
 
     // on ajoute l'element article
@@ -113,7 +107,7 @@ const showProducts = async (products, articleToShow) => {
 }
 
 /**
- * 
+ * Fonction servant a comparer le LS et l'API.
  * @returns 
  */
 async function displayAllProducts() {
@@ -129,13 +123,6 @@ async function displayAllProducts() {
     return;
 }
 
-/**
- * 
- */
-async function main() {
-    await displayAllProducts();
-}
-main();
 
 /**
  * Gerer la quantite des produits dans le panier.
@@ -160,26 +147,44 @@ function changeQuantity(product, quantity) {
  * @returns {number} "total des produits"
  */
 function getNumberProduct() {
-
-    let number = 0;
-    for (let product of cart) {
-        number += product.quantity;
+    // Declaration de la variable representant le total quantite.
+    let totalQuantity = 0;
+    console.log(`la quantité est de ${totalQuantity} avec un panier vide.`);
+    // Boucle pour calcul de la quantite globale.
+    for (let number of cart) {
+        let productsInCart = number.quantity;
+        console.log(`la quantité du canapé est de ${productsInCart}.`);
+        // Calcul total produits dans le panier.
+        totalQuantity += productsInCart;
     }
-    return number;
+    // Modification du DOM.
+    document.getElementById("totalQuantity").textContent = totalQuantity; 
 }
+// Appel de la fonction de total produits.
+getNumberProduct();
 
 /**
  * Donne le prix total du panier.
  * @returns {number} "prix total du panier"
  */
 function getTotalPrice() {
-
-    let total = 0;
-    for (let product of cart) {
-        total += product.quantity * product.price;
+    // Declaration de la variable representant le prix total.
+    let totalPrice = 0;
+    console.log(`la quantité est de ${totalPrice}€ avec un panier vide.`);
+    // Boucle pour calcul prix global.
+    for (let product in cart) {
+        let productsInCart = product.quantity;
+        console.log(productsInCart);
+        let priceOfProduct = product.price;
+        console.log(priceOfProduct);
+        // Calcul total prix.
+        let totalOfCart = productsInCart * priceOfProduct;
+        totalPrice += totalOfCart;
     }
-    return total;
+    document.getElementById("totalPrice").textContent = totalPrice; 
 }
+// Appel de la fonction de total prix.
+getTotalPrice();
 
 /**
  * Possibilite de retirer un produit du panier.
@@ -189,10 +194,24 @@ function getTotalPrice() {
     cart = cart.filter(p => p.id != product.id);
 }
 // function listenDeleteItem() {
-
+    
 //     // cart = cart.filter(pDeleteItem => pDeleteItem.id != article.id);
 //     // saveCart(cart);
 //     pDeleteItem.addEventListener("click", function () {
-
+    
 //     });
 // }
+
+/********EVENEMENTS********/
+
+// Creer un addEventListener pour la quantite.
+// Creer un addEventListener pour la suppression.
+// Creer un addEventListener pour le passage de commande.
+
+/**
+ * 
+ */
+async function main() {
+    await displayAllProducts();
+}
+main();
