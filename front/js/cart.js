@@ -12,10 +12,44 @@ let cartItems = document.getElementById("cart__items");
  */
 const fetchProducts = () => {
     return fetch('http://localhost:3000/api/products') // on va chercher l'API avec la methode fetch 
-    .then(res => res.json())
-    .then(data => data) // on fait une promesse en renvoyant la réponse au format JSON. // on définit un paramètre pour products en réutilisant .then 
-    .catch((error) => console.error(error));
+        .then(res => res.json())
+        .then(data => data) // on fait une promesse en renvoyant la réponse au format JSON. // on définit un paramètre pour products en réutilisant .then 
+        .catch((error) => console.error(error));
 }
+
+/**
+ * setter panier pour la page cart (pioche des infos dans le localStorage et depuis l'API)
+ */
+let infosAPI = fetchProducts();
+async function setCart(infosAPI, cart) {
+    console.log("infosAPI", infosAPI);
+    console.log('LS', cart);
+    /* boucle pour récupérer les infos manquantes dans le LS (eg. price) */
+    for (let item of cart) {
+        console.log(item)
+        let products = await infosAPI.find(function (detail) {
+            // find pour récupérer le bon produit
+            return detail._id == item.id;
+        });
+
+        item.id = products.id;
+        item.name = products.name;
+        console.log(products.name);
+        item.color = products.colors;
+        item.qty = products.quantity;
+        item.price = products.price; // ajout du prix
+        console.log(products.price);
+        item.imageUrl = products.imageUrl; // ajout photo
+
+        myCart.push(item); // ajout du produit dans le panier de la page
+    }
+    console.log("myCart", myCart);
+    return myCart;
+}
+
+let myCart
+myCart = setCart(infosAPI, cart);
+console.log(myCart);
 
 /**
  * Fonction pour creer les elements du DOM manquants.
@@ -119,10 +153,8 @@ async function displayAllProducts() {
         const product = products.filter(p => p._id === articleToShow.id)
         showProducts(product[0], articleToShow);
     }
-
     return;
 }
-
 
 /**
  * Gerer la quantite des produits dans le panier.
@@ -158,7 +190,7 @@ function getNumberProduct() {
         totalQuantity += productsInCart;
     }
     // Modification du DOM.
-    document.getElementById("totalQuantity").textContent = totalQuantity; 
+    document.getElementById("totalQuantity").textContent = totalQuantity;
 }
 // Appel de la fonction de total produits.
 getNumberProduct();
@@ -168,20 +200,27 @@ getNumberProduct();
  * @returns {number} "prix total du panier"
  */
 function getTotalPrice() {
+    let API = fetchProducts();
+    let totatQty = getNumberProduct();
+    console.log("ici", totatQty);
     // Declaration de la variable representant le prix total.
     let totalPrice = 0;
-    console.log(`la quantité est de ${totalPrice}€ avec un panier vide.`);
+    console.log(`le prix est de ${totalPrice}€ avec un panier vide.`);
     // Boucle pour calcul prix global.
-    for (let product in cart) {
-        let productsInCart = product.quantity;
-        console.log(productsInCart);
+    for (let product in API) {
         let priceOfProduct = product.price;
         console.log(priceOfProduct);
+
+        // for (let article in cart) {
+        //     let productsInCart = article.quantity;
+        //     console.log(productsInCart);
         // Calcul total prix.
-        let totalOfCart = productsInCart * priceOfProduct;
+        let totalOfCart = totatQty * priceOfProduct;
         totalPrice += totalOfCart;
+        // }
     }
-    document.getElementById("totalPrice").textContent = totalPrice; 
+    document.getElementById("totalPrice").textContent = totalPrice;
+    return;
 }
 // Appel de la fonction de total prix.
 getTotalPrice();
@@ -190,15 +229,15 @@ getTotalPrice();
  * Possibilite de retirer un produit du panier.
  * @param {string} product 
  */
- function deleteItem(){
+function deleteItem() {
     cart = cart.filter(p => p.id != product.id);
 }
 // function listenDeleteItem() {
-    
+
 //     // cart = cart.filter(pDeleteItem => pDeleteItem.id != article.id);
 //     // saveCart(cart);
 //     pDeleteItem.addEventListener("click", function () {
-    
+
 //     });
 // }
 
