@@ -63,12 +63,12 @@ const setHTML = function (article) {
     elementDescription.textContent = article.description;
 }
 
-let domColors = document.getElementById("colors");
 /** 
  * Ajout des couleurs dans la liste.
  * @param {array}
-*/
+ */
 const setColorSelect = function (colors) {
+    let domColors = document.getElementById("colors");
     // Affichage des couleurs dans la console.
     console.log(domColors);
     for (let color of colors) {
@@ -121,7 +121,7 @@ function addToCart(product) {
             // Appel de la fonction du localStorage.
             saveCart(cart);
             // Ajout d'une fenetre pop up signalant que le produit a ete ajoute au panier.
-            alert("Votre sélection est ajoutée dans votre panier !")
+            alert("Votre sélection est ajoutée au panier !")
             // Retourne le produit incremente.
             return;
         }

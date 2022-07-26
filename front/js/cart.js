@@ -1,6 +1,6 @@
 /**********VARIABLES**********/
 
-let cart = JSON.parse(localStorage.getItem("cart")); // on recupere ce qu'il y a dans le local storage
+let cart = JSON.parse(localStorage.getItem("cart")); // On recupere ce qu'il y a dans le local storage.
 console.log(cart);
 let cartItems = document.getElementById("cart__items");
 
@@ -11,45 +11,11 @@ let cartItems = document.getElementById("cart__items");
  * @returns {array}
  */
 const fetchProducts = () => {
-    return fetch('http://localhost:3000/api/products') // on va chercher l'API avec la methode fetch 
+    return fetch('http://localhost:3000/api/products') // On va chercher l'API avec la methode fetch.
         .then(res => res.json())
-        .then(data => data) // on fait une promesse en renvoyant la réponse au format JSON. // on définit un paramètre pour products en réutilisant .then 
+        .then(data => data) // On fait une promesse en renvoyant la réponse au format JSON. // On définit un paramètre pour products en réutilisant .then.
         .catch((error) => console.error(error));
 }
-
-/**
- * setter panier pour la page cart (pioche des infos dans le localStorage et depuis l'API)
- */
-let infosAPI = fetchProducts();
-async function setCart(infosAPI, cart) {
-    console.log("infosAPI", infosAPI);
-    console.log('LS', cart);
-    /* boucle pour récupérer les infos manquantes dans le LS (eg. price) */
-    for (let item of cart) {
-        console.log(item)
-        let products = await infosAPI.find(function (detail) {
-            // find pour récupérer le bon produit
-            return detail._id == item.id;
-        });
-
-        item.id = products.id;
-        item.name = products.name;
-        console.log(products.name);
-        item.color = products.colors;
-        item.qty = products.quantity;
-        item.price = products.price; // ajout du prix
-        console.log(products.price);
-        item.imageUrl = products.imageUrl; // ajout photo
-
-        myCart.push(item); // ajout du produit dans le panier de la page
-    }
-    console.log("myCart", myCart);
-    return myCart;
-}
-
-let myCart
-myCart = setCart(infosAPI, cart);
-console.log(myCart);
 
 /**
  * Fonction pour creer les elements du DOM manquants.
@@ -157,24 +123,6 @@ async function displayAllProducts() {
 }
 
 /**
- * Gerer la quantite des produits dans le panier.
- * @param {string} product 
- * @param {number} quantity 
- */
-function changeQuantity(product, quantity) {
-
-    let foundProduct = cart.find(p => p.id == product.id);
-    if (foundProduct != undefined) {
-        foundProduct.quantity += quantity;
-        if (foundProduct.quantity <= 0) {
-            removeFromCart(product);
-        } else {
-            saveCart(cart);
-        }
-    }
-}
-
-/**
  * Donne le nombre total des produits dans le panier.
  * @returns {number} "total des produits"
  */
@@ -197,27 +145,25 @@ getNumberProduct();
 
 /**
  * Donne le prix total du panier.
- * @returns {number} "prix total du panier"
+ * @returns {number} "Prix total du panier".
  */
-function getTotalPrice() {
-    let API = fetchProducts();
-    let totatQty = getNumberProduct();
-    console.log("ici", totatQty);
+async function getTotalPrice() {
+    let API = await fetchProducts();
     // Declaration de la variable representant le prix total.
     let totalPrice = 0;
     console.log(`le prix est de ${totalPrice}€ avec un panier vide.`);
     // Boucle pour calcul prix global.
-    for (let product in API) {
-        let priceOfProduct = product.price;
-        console.log(priceOfProduct);
+    for (let i in cart) {
 
-        // for (let article in cart) {
-        //     let productsInCart = article.quantity;
-        //     console.log(productsInCart);
-        // Calcul total prix.
-        let totalOfCart = totatQty * priceOfProduct;
-        totalPrice += totalOfCart;
-        // }
+        for (let j in API) {
+            const priceOfProduct = API[j].price;
+            const idOfProduct = API[j]._id;
+            console.log(priceOfProduct);
+            if (cart[i].id === idOfProduct) {
+                // Calcul total prix.
+                totalPrice += cart[i].quantity * priceOfProduct;
+            }
+        }
     }
     document.getElementById("totalPrice").textContent = totalPrice;
     return;
@@ -226,20 +172,48 @@ function getTotalPrice() {
 getTotalPrice();
 
 /**
+ * Gerer la quantite des produits dans le panier.
+ * @param {string} product 
+ * @param {number} quantity 
+ */
+function changeQuantity(product) {
+    for (let i in cart) {
+        if (productInCart.id === product.id && productInCart.color === product.color) {
+            // Incrementation en cas de meme id et de meme couleur.
+            productInCart.quantity = product.quantity + productInCart.quantity;
+        }
+
+        document.getElementsByClassName("itemQuantity");
+    }
+}
+
+/**
+ * Appel de la fonction changement de prix.
+ */
+let changeInput = document.getElementsByClassName("itemQuantity");
+function listenChangeInput() {
+    changeInput.addEventListener("click", function () {
+        console.log(changeInput);
+    })
+}
+// Appel de la fonction écoute bouton changement quantite.
+listenChangeInput();
+
+/**
  * Possibilite de retirer un produit du panier.
  * @param {string} product 
  */
 function deleteItem() {
     cart = cart.filter(p => p.id != product.id);
 }
-// function listenDeleteItem() {
+function listenDeleteItem() {
 
-//     // cart = cart.filter(pDeleteItem => pDeleteItem.id != article.id);
-//     // saveCart(cart);
-//     pDeleteItem.addEventListener("click", function () {
+    // cart = cart.filter(pDeleteItem => pDeleteItem.id != article.id);
+    // saveCart(cart);
+    pDeleteItem.addEventListener("click", function () {
 
-//     });
-// }
+    });
+}
 
 /********EVENEMENTS********/
 
@@ -254,3 +228,6 @@ async function main() {
     await displayAllProducts();
 }
 main();
+
+/**********FORMULAIRE**********/
+
