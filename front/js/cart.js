@@ -1,10 +1,35 @@
 /**********VARIABLES**********/
 
-let cart = JSON.parse(localStorage.getItem("cart")); // On recupere ce qu'il y a dans le local storage.
-console.log(cart);
+// let cart = JSON.parse(localStorage.getItem("cart")); // On recupere ce qu'il y a dans le local storage.
+// console.log(cart);
 let cartItems = document.getElementById("cart__items");
 
 /**********FONCTIONS**********/
+/**
+ * Affichage du panier sous forme de string dans la console.
+ * @param {array} cart
+ */
+function saveCart(cart) {
+    // LocalStorage definit et serialisation de cart en chaine de caractere.
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+/**
+ * Creation du panier et de sa condition si panier vide.
+ * @param {array} cart 
+ * @returns {json}
+ */
+function getCart() {
+    // Recuperation de l'item cart.
+    let cart = localStorage.getItem("cart");
+    // Creation d'un tableau si le panier est vide.
+    if (cart == null) {
+        return [];
+    } else {
+        return JSON.parse(cart);
+    }
+}
+
 
 /**
  * Fonction pour recuperer l'API.
@@ -113,7 +138,7 @@ const showProducts = async (products, articleToShow) => {
 async function displayAllProducts() {
     const products = await fetchProducts();
     console.log(products);
-    let cart = JSON.parse(localStorage.getItem("cart"));
+    let cart = getCart();
     // Remplacer cart par globalArray et supprimer la ligne const product.
     for (let articleToShow of cart) {
         const product = products.filter(p => p._id === articleToShow.id)
@@ -129,6 +154,7 @@ async function displayAllProducts() {
 function getNumberProduct() {
     // Declaration de la variable representant le total quantite.
     let totalQuantity = 0;
+    let cart = getCart();
     console.log(`la quantité est de ${totalQuantity} avec un panier vide.`);
     // Boucle pour calcul de la quantite globale.
     for (let number of cart) {
@@ -149,6 +175,7 @@ getNumberProduct();
  */
 async function getTotalPrice() {
     let API = await fetchProducts();
+    let cart = getCart();
     // Declaration de la variable representant le prix total.
     let totalPrice = 0;
     console.log(`le prix est de ${totalPrice}€ avec un panier vide.`);
@@ -176,44 +203,55 @@ getTotalPrice();
  * @param {string} product 
  * @param {number} quantity 
  */
-function changeQuantity(product) {
+function changeQuantity(id, color, quantity) {
+    let cart = getCart();
     for (let i in cart) {
-        if (productInCart.id === product.id && productInCart.color === product.color) {
+        // const addProduct = cart[i];
+        if (cart[i].id === id && cart[i].color === color) {
             // Incrementation en cas de meme id et de meme couleur.
-            productInCart.quantity = product.quantity + productInCart.quantity;
+            cart[i].quantity = quantity;
         }
-
-        document.getElementsByClassName("itemQuantity");
+        saveCart(cart);
+        location.reload();
     }
 }
 
 /**
  * Appel de la fonction changement de prix.
  */
-let changeInput = document.getElementsByClassName("itemQuantity");
 function listenChangeInput() {
-    changeInput.addEventListener("click", function () {
-        console.log(changeInput);
-    })
+    let changeInput = document.getElementsByName("itemQuantity");
+    for (let item of changeInput) {
+
+        item.addEventListener("change", function (event) {
+            console.log(changeInput);
+
+            const parent = event.target.closest("article");
+            const dataId = parent.dataset.id;
+            const dataColor = parent.dataset.color;
+            const newQty = parseInt(event.target.value);
+            changeQuantity(dataId, dataColor, newQty);
+        })
+    }
 }
 // Appel de la fonction écoute bouton changement quantite.
-listenChangeInput();
 
-/**
- * Possibilite de retirer un produit du panier.
- * @param {string} product 
- */
-function deleteItem() {
-    cart = cart.filter(p => p.id != product.id);
-}
-function listenDeleteItem() {
 
-    // cart = cart.filter(pDeleteItem => pDeleteItem.id != article.id);
-    // saveCart(cart);
-    pDeleteItem.addEventListener("click", function () {
+// /**
+//  * Possibilite de retirer un produit du panier.
+//  * @param {string} product 
+//  */
+// function deleteItem() {
+//     cart = cart.filter(p => p.id != product.id);
+// }
+// function listenDeleteItem() {
 
-    });
-}
+//     // cart = cart.filter(pDeleteItem => pDeleteItem.id != article.id);
+//     // saveCart(cart);
+//     pDeleteItem.addEventListener("click", function () {
+
+//     });
+// }
 
 /********EVENEMENTS********/
 
@@ -226,6 +264,7 @@ function listenDeleteItem() {
  */
 async function main() {
     await displayAllProducts();
+    listenChangeInput();
 }
 main();
 
