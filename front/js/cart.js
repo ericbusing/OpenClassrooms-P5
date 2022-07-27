@@ -1,10 +1,8 @@
-/**********VARIABLES**********/
+/*--------------------------------------------------------------------------VARIABLES--------------------------------------------------------------------------*/
 
-// let cart = JSON.parse(localStorage.getItem("cart")); // On recupere ce qu'il y a dans le local storage.
-// console.log(cart);
 let cartItems = document.getElementById("cart__items");
 
-/**********FONCTIONS**********/
+/*--------------------------------------------------------------------------FONCTIONS--------------------------------------------------------------------------*/
 /**
  * Affichage du panier sous forme de string dans la console.
  * @param {array} cart
@@ -29,7 +27,6 @@ function getCart() {
         return JSON.parse(cart);
     }
 }
-
 
 /**
  * Fonction pour recuperer l'API.
@@ -136,9 +133,11 @@ const showProducts = async (products, articleToShow) => {
  * @returns 
  */
 async function displayAllProducts() {
+    // Declaration d'une constante qui contiendra l'API.
     const products = await fetchProducts();
     console.log(products);
-    let cart = getCart();
+    // Declaration d'une constante qui contiendra le LS.
+    const cart = getCart();
     // Remplacer cart par globalArray et supprimer la ligne const product.
     for (let articleToShow of cart) {
         const product = products.filter(p => p._id === articleToShow.id)
@@ -151,7 +150,7 @@ async function displayAllProducts() {
  * Donne le nombre total des produits dans le panier.
  * @returns {number} "total des produits"
  */
-function getNumberProduct() {
+function getTotalQuantity() {
     // Declaration de la variable representant le total quantite.
     let totalQuantity = 0;
     let cart = getCart();
@@ -166,14 +165,13 @@ function getNumberProduct() {
     // Modification du DOM.
     document.getElementById("totalQuantity").textContent = totalQuantity;
 }
-// Appel de la fonction de total produits.
-getNumberProduct();
 
 /**
  * Donne le prix total du panier.
  * @returns {number} "Prix total du panier".
  */
 async function getTotalPrice() {
+
     let API = await fetchProducts();
     let cart = getCart();
     // Declaration de la variable representant le prix total.
@@ -195,78 +193,118 @@ async function getTotalPrice() {
     document.getElementById("totalPrice").textContent = totalPrice;
     return;
 }
-// Appel de la fonction de total prix.
-getTotalPrice();
 
 /**
  * Gerer la quantite des produits dans le panier.
  * @param {string} product 
  * @param {number} quantity 
  */
-function changeQuantity(id, color, quantity) {
+function changeQuantity(id, color, quantity, price) {
+    // Declaration d'une constante qui contiendra le LS.
     let cart = getCart();
     for (let i in cart) {
-        // const addProduct = cart[i];
+        // Condition comparant id et couleur.
         if (cart[i].id === id && cart[i].color === color) {
             // Incrementation en cas de meme id et de meme couleur.
             cart[i].quantity = quantity;
+            cart[i].price = price;
         }
         saveCart(cart);
+        // Rechargement de la page après avoir change la quantite.
         location.reload();
     }
 }
-
-/**
- * Appel de la fonction changement de prix.
- */
-function listenChangeInput() {
-    let changeInput = document.getElementsByName("itemQuantity");
-    for (let item of changeInput) {
-
-        item.addEventListener("change", function (event) {
-            console.log(changeInput);
-
-            const parent = event.target.closest("article");
-            const dataId = parent.dataset.id;
-            const dataColor = parent.dataset.color;
-            const newQty = parseInt(event.target.value);
-            changeQuantity(dataId, dataColor, newQty);
-        })
-    }
-}
-// Appel de la fonction écoute bouton changement quantite.
-
 
 // /**
 //  * Possibilite de retirer un produit du panier.
 //  * @param {string} product 
 //  */
 // function deleteItem() {
-//     cart = cart.filter(p => p.id != product.id);
+//     // Declaration d'une constante qui contiendra le LS.
+//     let cart = getCart();
+//     for (let i in cart) {
+//         // const addProduct = cart[i];
+//         if (cart[i].id === id && cart[i].color === color) {
+//             // Incrementation en cas de meme id et de meme couleur.
+//             cart[i].quantity = quantity;
+//         }
+//         saveCart(cart);
+//         // Rechargement de la page après avoir change la quantite.
+//         location.reload();
+//     }
 // }
-// function listenDeleteItem() {
 
-//     // cart = cart.filter(pDeleteItem => pDeleteItem.id != article.id);
-//     // saveCart(cart);
-//     pDeleteItem.addEventListener("click", function () {
+// /**
+//  * Fonction permettant de passer la commander.
+//  * @param {string} product 
+//  */
+//  function placeOrder() {
 
-//     });
 // }
 
-/********EVENEMENTS********/
-
-// Creer un addEventListener pour la quantite.
-// Creer un addEventListener pour la suppression.
-// Creer un addEventListener pour le passage de commande.
+/*--------------------------------------------------------------------------EVENEMENTS--------------------------------------------------------------------------*/
 
 /**
- * 
+ * Ecoute de la fonction changement de prix.
+ */
+function listenChangeInput() {
+    // Recuperation du bouton "Qté" dans le DOM.
+    let changeInput = document.getElementsByName("itemQuantity");
+    for (let item of changeInput) {
+        // Methode d'ecoute pour le bouton "Qté".
+        item.addEventListener("change", function (event) {
+            console.log(changeInput);
+            const parent = event.target.closest("article");
+            const dataId = parent.dataset.id;
+            const dataColor = parent.dataset.color;
+            const newQty = parseInt(event.target.value);
+            // Appel de la fonction de changement de quantite, avec les constantes instentiees au-dessus, en parametre.
+            changeQuantity(dataId, dataColor, newQty);
+        })
+    }
+}
+
+// /**
+//  * Ecoute de la fonction de suppression.
+//  */
+// function listenDeleteItem() {
+//     // Recuperation du bouton "Qté" dans le DOM.
+//     let deleteProduct = document.getElementsByName("deleteItem");
+//     for (let item of deleteProduct) {
+//         // Methode d'ecoute pour le bouton "Supprimer".
+//         item.addEventListener("click", function () {
+//             console.log(deleteProduct);
+//             const parent = event.target.closest("article");
+//             const dataId = parent.dataset.id;
+//             const dataColor = parent.dataset.color;
+//             const newQty = parseInt(event.target.value);
+//             // Appel de la fonction de changement de quantite, avec les constantes instentiees au-dessus, en parametre.
+//             deleteItem(dataId, dataColor, newQty);
+//         })
+//     }
+// }
+
+// /**
+//  * Ecoute de la fonction de commande.
+//  */
+//  function listenPlaceOrder() {
+
+// }
+
+/*--------------------------------------------------------------------------FORMULAIRE--------------------------------------------------------------------------*/
+
+
+
+/*--------------------------------------------------------------------------CHARGEMENT DE LA PAGE--------------------------------------------------------------------------*/
+
+/**
+ * Fonction principale appelant les autres fonctions.
  */
 async function main() {
     await displayAllProducts();
+    getTotalQuantity();
+    getTotalPrice();
     listenChangeInput();
+    // listenDeleteItem();
 }
 main();
-
-/**********FORMULAIRE**********/
-

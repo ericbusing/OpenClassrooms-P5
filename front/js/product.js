@@ -1,4 +1,4 @@
-/**********VARIABLES**********/
+/*--------------------------------------------------------------------------VARIABLES--------------------------------------------------------------------------*/
 
 // Creation des variables.
 let elementImage = document.querySelector(".item__img");
@@ -8,7 +8,7 @@ let elementDescription = document.getElementById("description");
 let elementCart = document.getElementById("addToCart");
 let id = getIdFromUrl();
 
-/**********FONCTIONS**********/
+/*--------------------------------------------------------------------------FONCTIONS--------------------------------------------------------------------------*/
 
 /**
  * Recuperation de l'ID.
@@ -78,7 +78,7 @@ const setColorSelect = function (colors) {
     }
 }
 
-/**********FONCTIONS PANIER **********/
+/*--------------------------------------------------------------------------FONCTIONS AJOUT PANIER--------------------------------------------------------------------------*/
 
 /**
  * Affichage du panier sous forme de string dans la console.
@@ -196,8 +196,15 @@ function checkQuantity() {
     }
 }
 
-// Chargement de page.
-let productId = getIdFromUrl();
-console.log(productId);
-let productElement = getElement(productId);
-let productCart = listenElementCart();
+/*--------------------------------------------------------------------------CHARGEMENT DE LA PAGE--------------------------------------------------------------------------*/
+
+/**
+ * Fonction principale appelant les autres fonctions.
+ */
+function main() {
+    let productId = getIdFromUrl();
+    console.log(productId);
+    getElement(productId);
+    listenElementCart();
+}
+main();
