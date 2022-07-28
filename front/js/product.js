@@ -130,7 +130,7 @@ function addToCart(product) {
     // Appel de la fonction du localStorage.
     saveCart(cart);
     // Ajout d'une fenetre pop up signalant que le produit a ete ajoute au panier.
-    alert("Votre sélection est ajoutée dans votre panier !")
+    alert("Votre sélection est ajoutée au panier panier !")
     return;
 }
 

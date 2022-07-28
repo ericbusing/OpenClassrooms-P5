@@ -51,9 +51,8 @@ const showProducts = async (products, articleToShow) => {
     let cartArticles = document.createElement("article");
     cartItems.appendChild(cartArticles);
     cartArticles.setAttribute("data-id", articleToShow.id);
-    cartArticles.setAttribute("data-color", articleToShow.colors)
+    cartArticles.setAttribute("data-color", articleToShow.color)
     cartArticles.className = "cart__item";
-
 
     // on ajoute l'element div qui va contenir l'img 
     let divCartImages = document.createElement("div");
@@ -199,48 +198,51 @@ async function getTotalPrice() {
  * @param {string} product 
  * @param {number} quantity 
  */
-function changeQuantity(id, color, quantity, price) {
+function changeQuantity(id, color, quantity) {
     // Declaration d'une constante qui contiendra le LS.
     let cart = getCart();
     for (let i in cart) {
-        // Condition comparant id et couleur.
+        // (Critere de comparaison). Si l'article pour lequel on veut mofifier sa quantite a un id et une couleur similaire a celui dans le panier.
         if (cart[i].id === id && cart[i].color === color) {
-            // Incrementation en cas de meme id et de meme couleur.
+            // Alors on incremente.
             cart[i].quantity = quantity;
-            cart[i].price = price;
+            // Mise a jour du panier.
+            saveCart(cart);
+            console.log("Quantité modifié !");
         }
-        saveCart(cart);
-        // Rechargement de la page après avoir change la quantite.
-        location.reload();
+    }
+    // Appel des fonctions pour les totaux afin que ceux-ci se mettent ajour lors du changement de quantite.
+    getTotalPrice();
+    getTotalQuantity();
+}
+
+/**
+ * Possibilite de retirer un produit du panier.
+ * @param {string} product 
+ */
+function deleteItem(id, color) {
+    // Declaration d'une constante qui contiendra le LS.
+    let cart = getCart();
+    for (let i in cart) {
+        // (Critere de comparaison). Si l'article que l'on veut supprimer a un id et une couleur similaire a celui dans le panier.
+        if (cart[i].id === id && cart[i].color === color) {
+            // Alors on le supprime.
+            cart.splice(i, 1);
+            // Mise a jour du panier.
+            saveCart(cart);
+            // Rechargement de la page pour la mettre a jour.
+            location.reload();
+            console.log("Quantité supprimée !");
+        }
     }
 }
 
-// /**
-//  * Possibilite de retirer un produit du panier.
-//  * @param {string} product 
-//  */
-// function deleteItem() {
-//     // Declaration d'une constante qui contiendra le LS.
-//     let cart = getCart();
-//     for (let i in cart) {
-//         // const addProduct = cart[i];
-//         if (cart[i].id === id && cart[i].color === color) {
-//             // Incrementation en cas de meme id et de meme couleur.
-//             cart[i].quantity = quantity;
-//         }
-//         saveCart(cart);
-//         // Rechargement de la page après avoir change la quantite.
-//         location.reload();
-//     }
-// }
+/**
+ * Fonction permettant de passer la commander.
+ */
+ function placeOrder() {
 
-// /**
-//  * Fonction permettant de passer la commander.
-//  * @param {string} product 
-//  */
-//  function placeOrder() {
-
-// }
+}
 
 /*--------------------------------------------------------------------------EVENEMENTS--------------------------------------------------------------------------*/
 
@@ -258,42 +260,52 @@ function listenChangeInput() {
             const dataId = parent.dataset.id;
             const dataColor = parent.dataset.color;
             const newQty = parseInt(event.target.value);
+            console.log(dataId, dataColor, newQty);
             // Appel de la fonction de changement de quantite, avec les constantes instentiees au-dessus, en parametre.
             changeQuantity(dataId, dataColor, newQty);
         })
     }
 }
 
-// /**
-//  * Ecoute de la fonction de suppression.
-//  */
-// function listenDeleteItem() {
-//     // Recuperation du bouton "Qté" dans le DOM.
-//     let deleteProduct = document.getElementsByName("deleteItem");
-//     for (let item of deleteProduct) {
-//         // Methode d'ecoute pour le bouton "Supprimer".
-//         item.addEventListener("click", function () {
-//             console.log(deleteProduct);
-//             const parent = event.target.closest("article");
-//             const dataId = parent.dataset.id;
-//             const dataColor = parent.dataset.color;
-//             const newQty = parseInt(event.target.value);
-//             // Appel de la fonction de changement de quantite, avec les constantes instentiees au-dessus, en parametre.
-//             deleteItem(dataId, dataColor, newQty);
-//         })
-//     }
-// }
+/**
+ * Ecoute de la fonction de suppression.
+ */
+function listenDeleteItem() {
+    // Recuperation du bouton "Suprrimer" dans le DOM.
+    let deleteProduct = document.querySelectorAll(".deleteItem");
+    for (let item of deleteProduct) {
+        // Methode d'ecoute pour le bouton "Supprimer".
+        item.addEventListener("click", function (event) {
+            console.log(deleteProduct);
+            // Constante ciblant l'element parent.
+            const parent = event.target.closest("article");
+            // Constante recuperant la data-id present dans article.
+            const dataId = parent.dataset.id;
+            // Constante recuperant la data-color present dans article.
+            const dataColor = parent.dataset.color;
+            console.log(dataId, dataColor);
+            // Condition avec une fenetre demandant confirmation de suppression.
+            if (window.confirm("Êtes-vous sûr de vouloir supprimer cet article ? Si oui cliquez sur OK sinon ANNULER.")) {
+                // Appel de la fonction de suppression, avec les constantes instentiees au-dessus, en parametre.
+                deleteItem(dataId, dataColor);
+            }
+        })
+    }
+}
 
-// /**
-//  * Ecoute de la fonction de commande.
-//  */
-//  function listenPlaceOrder() {
-
-// }
+/**
+ * Ecoute de la fonction de commande.
+ */
+ function listenPlaceOrder() {
+    // Recuperation du bouton commander dans le DOM.
+    let placeOrderButton = document.getElementById("order");
+}
 
 /*--------------------------------------------------------------------------FORMULAIRE--------------------------------------------------------------------------*/
 
-
+// Autoriser uniquement les lettre pour nom et prenoms.
+// Faire une fonction de vérif pour chaque champs (ex : checkLetter).
+// Requete POST pour passer commande.
 
 /*--------------------------------------------------------------------------CHARGEMENT DE LA PAGE--------------------------------------------------------------------------*/
 
@@ -305,6 +317,7 @@ async function main() {
     getTotalQuantity();
     getTotalPrice();
     listenChangeInput();
-    // listenDeleteItem();
+    listenDeleteItem();
+    listenPlaceOrder();
 }
 main();
