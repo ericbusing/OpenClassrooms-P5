@@ -1,8 +1,10 @@
-/*--------------------------------------------------------------------------VARIABLES--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------PANIER--------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------VARIABLES PANIER--------------------------------------------------------------------------*/
 
 let cartItems = document.getElementById("cart__items");
 
-/*--------------------------------------------------------------------------FONCTIONS--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------FONCTIONS PANIER--------------------------------------------------------------------------*/
 /**
  * Affichage du panier sous forme de string dans la console.
  * @param {array} cart
@@ -237,14 +239,7 @@ function deleteItem(id, color) {
     }
 }
 
-/**
- * Fonction permettant de passer la commander.
- */
-function placeOrder() {
-
-}
-
-/*--------------------------------------------------------------------------EVENEMENTS--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------EVENEMENTS PANIER--------------------------------------------------------------------------*/
 
 /**
  * Ecoute de la fonction changement de prix.
@@ -293,34 +288,13 @@ function listenDeleteItem() {
     }
 }
 
-/**
- * Ecoute de la fonction de commande.
- */
-function listenPlaceOrder() {
-    // Recuperation du bouton commander dans le DOM.
-    let placeOrderButton = document.getElementById("order");
-}
-
 /*--------------------------------------------------------------------------FORMULAIRE--------------------------------------------------------------------------*/
-
-// Autoriser uniquement les lettre pour nom et prenoms.
-// Faire une fonction de vérif pour chaque champs (ex : checkLetter).
-// Requete POST pour passer commande.
 
 /*--------------------------------------------------------------------------VARIABLES FORMULAIRE--------------------------------------------------------------------------*/
 
-// Declaration des variables servant a recuperer le DOM.
-// let firstName = document.getElementById("firstName");
-// let lastName = document.getElementById("lastName");
-// let address = document.getElementById("address");
-// let city = document.getElementById("city");
-// let email = document.getElementById("email");
-let formCart = document.querySelector(".cart__order__form");
+// Declaration de la variable servant a recuperer le formulaire dans le DOM.
 
-// Declaration des variables servant pour les RegEx.
-// let textRegex = new RegExp("^.{1,}[a-zA-ZÀ-ÿ]+$/");
-// let addressRegex = new Regexp ();
-// let mailRegex = new Regexp ();
+let formCart = document.querySelector(".cart__order__form");
 
 // Declaration des variables servant a recuperer les messages d'erreur.
 let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
@@ -331,40 +305,137 @@ let emailErrorMsg = document.getElementById("emailErrorMsg");
 
 /*--------------------------------------------------------------------------FONCTIONS FORMULAIRE--------------------------------------------------------------------------*/
 
-console.log(formCart.firstName);
-formCart.firstName.addEventListener("change", function(){
-    validFirstName(this);
-});
-
-const validFirstName = function(inputFirstName) {
-   /*Creation de la RegExp.
-   Dans la RegEx on demande que le texte contienne des minuscules, des majuscules, des accents et/ou un "-". 
-   On ajoute le "+" pour peciser qu'ils peuvent etre ecrit plusieurs fois. 
-   Le "^" désigne le début de la RegExp, les crochet le contenu de celle-ci et le "$" la fin.
-   Le "g" est un flag qui signifie que l'on veut chercher dans le global du formulaire.*/
+/**
+ * 
+ * @param {*} inputFirstName 
+ */
+function validFirstName(inputFirstName) {
+    /*Creation de la RegExp.
+    Dans la RegEx on demande que le texte contienne des minuscules, des majuscules, des accents et/ou un "-". 
+    On ajoute le "+" pour peciser qu'ils peuvent etre ecrit plusieurs fois. 
+    Le "^" désigne le début de la RegExp, les crochet le contenu de celle-ci et le "$" la fin.
+    Le "g" est un flag qui signifie que l'on veut chercher dans le global du formulaire.*/
     let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$", "g");
     let testFirstName = textRegex.test(inputFirstName.value);
     console.log(testFirstName);
-    if(textRegex){
-        firstNameErrorMsg.textContent = "Veuillez renseigner le champ prénom correctement.";
+    if (textRegex) {
+        firstNameErrorMsg.textContent = 'Veuillez renseigner le champ "Prénom" correctement.';
     }
 }
 
 /**
- * Fonction de verification des caracteres utilises pour le prenom.
+ * 
+ * @param {*} inputLastName 
  */
-// function checkFirstName() {
-//     if (!textRegex.test(firstName)) {
-//         console.log(!textRegex.test(firstName));
-//         firstNameErrorMsg.textContent = "Veuillez renseigner le champ Prénom correctement.";
-//         return false;
-//     } else {
-//         firstNameErrorMsg.textContent = "";
-//     }
-// }
-// checkFirstName();
+function validLastName(inputLastName) {
+    // Creation de la RegExp.
+    let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$", "g");
+    let testLastName = textRegex.test(inputLastName.value);
+    console.log(testLastName);
+    if (textRegex) {
+        lastNameErrorMsg.textContent = 'Veuillez renseigner le champ "Nom" correctement.';
+    }
+}
 
+/**
+ * 
+ * @param {*} inputAddress 
+ */
+function validAddress(inputAddress) {
+    // Creation de la RegExp.
+    let addressRegex = new RegExp("^[a-zA-ZÀ-ÿ0-9-]+$", "g");
+    let testAddress = addressRegex.test(inputAddress.value);
+    console.log(testAddress);
+    if (addressRegex) {
+        addressErrorMsg.textContent = 'Veuillez renseigner le champ "Adresse" correctement.';
+    }
+}
 
+/**
+ * 
+ * @param {*} inputCity 
+ */
+function validCity(inputCity) {
+    // Creation de la RegExp.
+    let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$", "g");
+    let testCity = textRegex.test(inputCity.value);
+    console.log(testCity);
+    if (textRegex) {
+        cityErrorMsg.textContent = 'Veuillez renseigner le champ "Ville" correctement.';
+    }
+}
+
+/**
+ * 
+ * @param {*} inputEmail 
+ */
+function validEmail(inputEmail) {
+    // Creation de la RegExp.
+    let emailRegex = new RegExp("^[a-zA-ZÀ-ÿ0-9._-]+[@]{1}+[a-zA-ZÀ-ÿ.-]+[.]{1}[a-z]{2,10}$", "g");
+    let testEmail = emailRegex.test(inputEmail.value);
+    console.log(testEmail);
+    if (emailRegex) {
+        emailErrorMsg.textContent = 'Veuillez renseigner le champ "Email" correctement.';
+    }
+}
+
+/*--------------------------------------------------------------------------EVENEMENTS FORMULAIRE--------------------------------------------------------------------------*/
+
+formCart.firstName.addEventListener("change", function () {
+    validFirstName(this);
+});
+console.log(formCart.firstName);
+
+formCart.lastName.addEventListener("change", function () {
+    validLastName(this);
+});
+console.log(formCart.lastName);
+
+formCart.address.addEventListener("change", function () {
+    validAddress(this);
+});
+console.log(formCart.address);
+
+formCart.city.addEventListener("change", function () {
+    validCity(this);
+});
+console.log(formCart.city);
+
+formCart.email.addEventListener("change", function () {
+    validEmail(this);
+});
+console.log(formCart.email);
+
+/*--------------------------------------------------------------------------COMMANDE--------------------------------------------------------------------------*/
+
+// Requete POST pour passer commande.
+
+/**
+ * Fonction permettant de passer la commander.
+ */
+function placeOrder() {
+    if (cart > 0 && formCart) {
+
+    }
+}
+
+/**
+ * Ecoute de la fonction de commande.
+ */
+function listenPlaceOrder() {
+    // Recuperation du bouton commander dans le DOM.
+    let placeOrderButton = document.getElementById("order");
+    /* 1 - Evénement d'écoute au bouton (penser au event.preventDefault()).
+2 - Récupérer dans des constantes les firstName... (leurs valeurs)
+3 - Créer un objet contact qui contiendra les infos (exemple: const contact={firstName: firstName....}
+4 - Faire une condition de vérification "est-ce que mes inputs sont bien remplis"
+5 - Sont-ils valides ?
+6 - Basculer sur une autre fonction dans laquelle on va instaurer un tableau vide qui va accueillir tous les id des produits de ton cart
+7 - Créer un objet avec ce tableau et le contact que tu avais créé avant
+8 - fetch post dans lequel on en profitera pour aller faire notre document.location avec le orderId (clé qui est déterminée dans tes spects techniques 
+    "if (firstName && lastName && address && city && email)"
+"const firstName = document.getElementById("firstName").value;"*/
+}
 
 /*--------------------------------------------------------------------------CHARGEMENT DE LA PAGE--------------------------------------------------------------------------*/
 
