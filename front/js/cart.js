@@ -240,7 +240,7 @@ function deleteItem(id, color) {
 /**
  * Fonction permettant de passer la commander.
  */
- function placeOrder() {
+function placeOrder() {
 
 }
 
@@ -296,7 +296,7 @@ function listenDeleteItem() {
 /**
  * Ecoute de la fonction de commande.
  */
- function listenPlaceOrder() {
+function listenPlaceOrder() {
     // Recuperation du bouton commander dans le DOM.
     let placeOrderButton = document.getElementById("order");
 }
@@ -306,6 +306,65 @@ function listenDeleteItem() {
 // Autoriser uniquement les lettre pour nom et prenoms.
 // Faire une fonction de vérif pour chaque champs (ex : checkLetter).
 // Requete POST pour passer commande.
+
+/*--------------------------------------------------------------------------VARIABLES FORMULAIRE--------------------------------------------------------------------------*/
+
+// Declaration des variables servant a recuperer le DOM.
+// let firstName = document.getElementById("firstName");
+// let lastName = document.getElementById("lastName");
+// let address = document.getElementById("address");
+// let city = document.getElementById("city");
+// let email = document.getElementById("email");
+let formCart = document.querySelector(".cart__order__form");
+
+// Declaration des variables servant pour les RegEx.
+// let textRegex = new RegExp("^.{1,}[a-zA-ZÀ-ÿ]+$/");
+// let addressRegex = new Regexp ();
+// let mailRegex = new Regexp ();
+
+// Declaration des variables servant a recuperer les messages d'erreur.
+let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+let addressErrorMsg = document.getElementById("addressErrorMsg");
+let cityErrorMsg = document.getElementById("cityErrorMsg");
+let emailErrorMsg = document.getElementById("emailErrorMsg");
+
+/*--------------------------------------------------------------------------FONCTIONS FORMULAIRE--------------------------------------------------------------------------*/
+
+console.log(formCart.firstName);
+formCart.firstName.addEventListener("change", function(){
+    validFirstName(this);
+});
+
+const validFirstName = function(inputFirstName) {
+   /*Creation de la RegExp.
+   Dans la RegEx on demande que le texte contienne des minuscules, des majuscules, des accents et/ou un "-". 
+   On ajoute le "+" pour peciser qu'ils peuvent etre ecrit plusieurs fois. 
+   Le "^" désigne le début de la RegExp, les crochet le contenu de celle-ci et le "$" la fin.
+   Le "g" est un flag qui signifie que l'on veut chercher dans le global du formulaire.*/
+    let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$", "g");
+    let testFirstName = textRegex.test(inputFirstName.value);
+    console.log(testFirstName);
+    if(textRegex){
+        firstNameErrorMsg.textContent = "Veuillez renseigner le champ prénom correctement.";
+    }
+}
+
+/**
+ * Fonction de verification des caracteres utilises pour le prenom.
+ */
+// function checkFirstName() {
+//     if (!textRegex.test(firstName)) {
+//         console.log(!textRegex.test(firstName));
+//         firstNameErrorMsg.textContent = "Veuillez renseigner le champ Prénom correctement.";
+//         return false;
+//     } else {
+//         firstNameErrorMsg.textContent = "";
+//     }
+// }
+// checkFirstName();
+
+
 
 /*--------------------------------------------------------------------------CHARGEMENT DE LA PAGE--------------------------------------------------------------------------*/
 
