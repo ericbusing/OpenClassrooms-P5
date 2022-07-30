@@ -172,15 +172,16 @@ function getTotalQuantity() {
  * @returns {number} "Prix total du panier".
  */
 async function getTotalPrice() {
-
+    // Declaration des variables pour appeler l'API et le LS.
     let API = await fetchProducts();
     let cart = getCart();
     // Declaration de la variable representant le prix total.
     let totalPrice = 0;
     console.log(`le prix est de ${totalPrice}€ avec un panier vide.`);
-    // Boucle pour calcul prix global.
+    // Boucles pour calcul prix global.
+    // Boucle cherchant dans le LS.
     for (let i in cart) {
-
+        // Boucle cherchant dans l'API.
         for (let j in API) {
             const priceOfProduct = API[j].price;
             const idOfProduct = API[j]._id;
@@ -191,6 +192,7 @@ async function getTotalPrice() {
             }
         }
     }
+    // Recuperation du DOM afin d'afficher le prix total au bon endroit.
     document.getElementById("totalPrice").textContent = totalPrice;
     return;
 }
@@ -251,8 +253,11 @@ function listenChangeInput() {
         // Methode d'ecoute pour le bouton "Qté".
         item.addEventListener("change", function (event) {
             console.log(changeInput);
+            // Constante ciblant l'element parent.
             const parent = event.target.closest("article");
+            // Constante recuperant la data-id present dans article.
             const dataId = parent.dataset.id;
+            // Constante recuperant la data-color present dans article.
             const dataColor = parent.dataset.color;
             const newQty = parseInt(event.target.value);
             console.log(dataId, dataColor, newQty);
@@ -293,7 +298,6 @@ function listenDeleteItem() {
 /*--------------------------------------------------------------------------VARIABLES FORMULAIRE--------------------------------------------------------------------------*/
 
 // Declaration de la variable servant a recuperer le formulaire dans le DOM.
-
 let formCart = document.querySelector(".cart__order__form");
 
 // Declaration des variables servant a recuperer les messages d'erreur.
@@ -306,7 +310,7 @@ let emailErrorMsg = document.getElementById("emailErrorMsg");
 /*--------------------------------------------------------------------------FONCTIONS FORMULAIRE--------------------------------------------------------------------------*/
 
 /**
- * 
+ * Fonction pour l'input prenom.
  * @param {*} inputFirstName 
  */
 function validFirstName(inputFirstName) {
@@ -318,13 +322,15 @@ function validFirstName(inputFirstName) {
     let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$", "g");
     let testFirstName = textRegex.test(inputFirstName.value);
     console.log(testFirstName);
-    if (textRegex) {
+    if (testFirstName === false) {
         firstNameErrorMsg.textContent = 'Veuillez renseigner le champ "Prénom" correctement.';
+    }else{
+        firstNameErrorMsg.textContent = "";
     }
 }
 
 /**
- * 
+ * Fonction pour l'input nom.
  * @param {*} inputLastName 
  */
 function validLastName(inputLastName) {
@@ -332,13 +338,15 @@ function validLastName(inputLastName) {
     let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$", "g");
     let testLastName = textRegex.test(inputLastName.value);
     console.log(testLastName);
-    if (textRegex) {
+    if (testLastName === false) {
         lastNameErrorMsg.textContent = 'Veuillez renseigner le champ "Nom" correctement.';
+    }else{
+        lastNameErrorMsg.textContent = "";
     }
 }
 
 /**
- * 
+ * Fonction pour l'input adresse.
  * @param {*} inputAddress 
  */
 function validAddress(inputAddress) {
@@ -346,13 +354,15 @@ function validAddress(inputAddress) {
     let addressRegex = new RegExp("^[a-zA-ZÀ-ÿ0-9-]+$", "g");
     let testAddress = addressRegex.test(inputAddress.value);
     console.log(testAddress);
-    if (addressRegex) {
+    if (testAddress === false) {
         addressErrorMsg.textContent = 'Veuillez renseigner le champ "Adresse" correctement.';
+    }else{
+        addressErrorMsg.textContent = "";
     }
 }
 
 /**
- * 
+ * Fonction pour l'input ville.
  * @param {*} inputCity 
  */
 function validCity(inputCity) {
@@ -360,72 +370,65 @@ function validCity(inputCity) {
     let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$", "g");
     let testCity = textRegex.test(inputCity.value);
     console.log(testCity);
-    if (textRegex) {
+    if (testCity === false) {
         cityErrorMsg.textContent = 'Veuillez renseigner le champ "Ville" correctement.';
+    }else{
+        cityErrorMsg.textContent = "";
     }
 }
 
 /**
- * 
+ * Fonction pour l'input email.
  * @param {*} inputEmail 
  */
 function validEmail(inputEmail) {
     // Creation de la RegExp.
-    let emailRegex = new RegExp("^[a-zA-ZÀ-ÿ0-9._-]+[@]{1}+[a-zA-ZÀ-ÿ.-]+[.]{1}[a-z]{2,10}$", "g");
+    let emailRegex = new RegExp("^[a-zA-ZÀ-ÿ0-9._-]+ [@]{1} + [a-zA-ZÀ-ÿ.-]+ [.]{1}[a-z]{2,10}$", "g");
     let testEmail = emailRegex.test(inputEmail.value);
     console.log(testEmail);
-    if (emailRegex) {
+    if (testEmail === false) {
         emailErrorMsg.textContent = 'Veuillez renseigner le champ "Email" correctement.';
+    }else{
+        emailErrorMsg.textContent = "";
     }
 }
 
 /*--------------------------------------------------------------------------EVENEMENTS FORMULAIRE--------------------------------------------------------------------------*/
 
-formCart.firstName.addEventListener("change", function () {
-    validFirstName(this);
-});
-console.log(formCart.firstName);
+/**
+ * Fonction regroupant tout les eventListener des inputs du formulaire.
+ */
+function allInput() {
+    formCart.firstName.addEventListener("change", function () {
+        validFirstName(this);
+    });
+    console.log(formCart.firstName);
 
-formCart.lastName.addEventListener("change", function () {
-    validLastName(this);
-});
-console.log(formCart.lastName);
+    formCart.lastName.addEventListener("change", function () {
+        validLastName(this);
+    });
+    console.log(formCart.lastName);
 
-formCart.address.addEventListener("change", function () {
-    validAddress(this);
-});
-console.log(formCart.address);
+    formCart.address.addEventListener("change", function () {
+        validAddress(this);
+    });
+    console.log(formCart.address);
 
-formCart.city.addEventListener("change", function () {
-    validCity(this);
-});
-console.log(formCart.city);
+    formCart.city.addEventListener("change", function () {
+        validCity(this);
+    });
+    console.log(formCart.city);
 
-formCart.email.addEventListener("change", function () {
-    validEmail(this);
-});
-console.log(formCart.email);
+    formCart.email.addEventListener("change", function () {
+        validEmail(this);
+    });
+    console.log(formCart.email);
+}
 
 /*--------------------------------------------------------------------------COMMANDE--------------------------------------------------------------------------*/
 
 // Requete POST pour passer commande.
-
-/**
- * Fonction permettant de passer la commander.
- */
-function placeOrder() {
-    if (cart > 0 && formCart) {
-
-    }
-}
-
-/**
- * Ecoute de la fonction de commande.
- */
-function listenPlaceOrder() {
-    // Recuperation du bouton commander dans le DOM.
-    let placeOrderButton = document.getElementById("order");
-    /* 1 - Evénement d'écoute au bouton (penser au event.preventDefault()).
+/* 1 - Evénement d'écoute au bouton (penser au event.preventDefault()).
 2 - Récupérer dans des constantes les firstName... (leurs valeurs)
 3 - Créer un objet contact qui contiendra les infos (exemple: const contact={firstName: firstName....}
 4 - Faire une condition de vérification "est-ce que mes inputs sont bien remplis"
@@ -433,14 +436,53 @@ function listenPlaceOrder() {
 6 - Basculer sur une autre fonction dans laquelle on va instaurer un tableau vide qui va accueillir tous les id des produits de ton cart
 7 - Créer un objet avec ce tableau et le contact que tu avais créé avant
 8 - fetch post dans lequel on en profitera pour aller faire notre document.location avec le orderId (clé qui est déterminée dans tes spects techniques 
-    "if (firstName && lastName && address && city && email)"
+"if (firstName && lastName && address && city && email)"
 "const firstName = document.getElementById("firstName").value;"*/
-}
+
+/*--------------------------------------------------------------------------FONCTION FORMULAIRE--------------------------------------------------------------------------*/
+
+/**
+ * Fonction permettant de passer la commander.
+ */
+// function placeOrder() {
+//     if (cart > 0 && formCart) {
+
+//     }
+// }
+/* On écoute le bouton Commander au panier avec l'Evenement click*/
+const orderBtn = document.getElementById("order");
+orderBtn.addEventListener("click", function(e) {
+    if(allInput()){
+        const contact = {
+            firstName : firstName,
+            lastName : lastName,
+            address : address,
+            city : city,
+            email : email
+        }
+    }
+})
+
+// document.querySelector("#order").addEventListener("click", function(event) {
+//     console.log("Désolé ! preventDefault() ne vous laissera pas cocher ceci.");
+//     event.preventDefault();
+//   }, false);
+
+/*--------------------------------------------------------------------------EVENEMENT COMMANDE--------------------------------------------------------------------------*/
+
+/**
+ * Ecoute de la fonction de commande.
+ */
+// function listenPlaceOrder() {
+//     // Recuperation du bouton commander dans le DOM.
+//     let placeOrderButton = document.getElementById("order");
+
+// }
 
 /*--------------------------------------------------------------------------CHARGEMENT DE LA PAGE--------------------------------------------------------------------------*/
 
 /**
- * Fonction principale appelant les autres fonctions.
+ * Fonction principale appelant les autres fonctions de la page.
  */
 async function main() {
     await displayAllProducts();
@@ -448,6 +490,7 @@ async function main() {
     getTotalPrice();
     listenChangeInput();
     listenDeleteItem();
-    listenPlaceOrder();
+    // listenPlaceOrder();
+    allInput();
 }
 main();
