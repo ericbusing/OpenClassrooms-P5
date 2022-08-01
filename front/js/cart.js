@@ -131,7 +131,6 @@ const showProducts = async (products, articleToShow) => {
 
 /**
  * Fonction servant a comparer le LS et l'API.
- * @returns 
  */
 async function displayAllProducts() {
     // Declaration d'une constante qui contiendra l'API.
@@ -199,7 +198,8 @@ async function getTotalPrice() {
 
 /**
  * Gerer la quantite des produits dans le panier.
- * @param {string} product 
+ * @param {string} id 
+ * @param {string} color
  * @param {number} quantity 
  */
 function changeQuantity(id, color, quantity) {
@@ -222,7 +222,8 @@ function changeQuantity(id, color, quantity) {
 
 /**
  * Possibilite de retirer un produit du panier.
- * @param {string} product 
+ * @param {string} id 
+ * @param {string} color
  */
 function deleteItem(id, color) {
     // Declaration d'une constante qui contiendra le LS.
@@ -285,7 +286,7 @@ function listenDeleteItem() {
             const dataColor = parent.dataset.color;
             console.log(dataId, dataColor);
             // Condition avec une fenetre demandant confirmation de suppression.
-            if (window.confirm("Êtes-vous sûr de vouloir supprimer cet article ? Si oui cliquez sur OK sinon ANNULER.")) {
+            if (window.confirm(`Êtes-vous sûr de vouloir supprimer cet article ? Si oui cliquez sur "OK" sinon "ANNULER".`)) {
                 // Appel de la fonction de suppression, avec les constantes instentiees au-dessus, en parametre.
                 deleteItem(dataId, dataColor);
             }
@@ -307,6 +308,15 @@ let addressErrorMsg = document.getElementById("addressErrorMsg");
 let cityErrorMsg = document.getElementById("cityErrorMsg");
 let emailErrorMsg = document.getElementById("emailErrorMsg");
 
+// Declaration des variables contenant les RegExp.
+/*Dans la RegEx on demande que le texte contienne des minuscules, des majuscules, des accents et/ou un "-". 
+On ajoute le "+" pour peciser qu'ils peuvent etre ecrit plusieurs fois. 
+Le "^" désigne le début de la RegExp, les crochet le contenu de celle-ci et le "$" la fin.
+Le "g" est un flag qui signifie que l'on veut chercher dans le global du formulaire.*/
+let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$");
+let addressRegex = new RegExp("^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
+let emailRegex = new RegExp("^[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-z]{2,10}$");
+
 /*--------------------------------------------------------------------------FONCTIONS FORMULAIRE--------------------------------------------------------------------------*/
 
 /**
@@ -314,17 +324,11 @@ let emailErrorMsg = document.getElementById("emailErrorMsg");
  * @param {*} inputFirstName 
  */
 function validFirstName(inputFirstName) {
-    /*Creation de la RegExp.
-    Dans la RegEx on demande que le texte contienne des minuscules, des majuscules, des accents et/ou un "-". 
-    On ajoute le "+" pour peciser qu'ils peuvent etre ecrit plusieurs fois. 
-    Le "^" désigne le début de la RegExp, les crochet le contenu de celle-ci et le "$" la fin.
-    Le "g" est un flag qui signifie que l'on veut chercher dans le global du formulaire.*/
-    let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$", "g");
     let testFirstName = textRegex.test(inputFirstName.value);
     console.log(testFirstName);
     if (testFirstName === false) {
         firstNameErrorMsg.textContent = 'Veuillez renseigner le champ "Prénom" correctement.';
-    }else{
+    } else {
         firstNameErrorMsg.textContent = "";
     }
 }
@@ -334,13 +338,11 @@ function validFirstName(inputFirstName) {
  * @param {*} inputLastName 
  */
 function validLastName(inputLastName) {
-    // Creation de la RegExp.
-    let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$", "g");
     let testLastName = textRegex.test(inputLastName.value);
     console.log(testLastName);
     if (testLastName === false) {
         lastNameErrorMsg.textContent = 'Veuillez renseigner le champ "Nom" correctement.';
-    }else{
+    } else {
         lastNameErrorMsg.textContent = "";
     }
 }
@@ -350,13 +352,11 @@ function validLastName(inputLastName) {
  * @param {*} inputAddress 
  */
 function validAddress(inputAddress) {
-    // Creation de la RegExp.
-    let addressRegex = new RegExp("^[a-zA-ZÀ-ÿ0-9-]+$", "g");
     let testAddress = addressRegex.test(inputAddress.value);
     console.log(testAddress);
     if (testAddress === false) {
         addressErrorMsg.textContent = 'Veuillez renseigner le champ "Adresse" correctement.';
-    }else{
+    } else {
         addressErrorMsg.textContent = "";
     }
 }
@@ -366,13 +366,11 @@ function validAddress(inputAddress) {
  * @param {*} inputCity 
  */
 function validCity(inputCity) {
-    // Creation de la RegExp.
-    let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$", "g");
     let testCity = textRegex.test(inputCity.value);
     console.log(testCity);
     if (testCity === false) {
         cityErrorMsg.textContent = 'Veuillez renseigner le champ "Ville" correctement.';
-    }else{
+    } else {
         cityErrorMsg.textContent = "";
     }
 }
@@ -382,13 +380,11 @@ function validCity(inputCity) {
  * @param {*} inputEmail 
  */
 function validEmail(inputEmail) {
-    // Creation de la RegExp.
-    let emailRegex = new RegExp("^[a-zA-ZÀ-ÿ0-9._-]+ [@]{1} + [a-zA-ZÀ-ÿ.-]+ [.]{1}[a-z]{2,10}$", "g");
     let testEmail = emailRegex.test(inputEmail.value);
     console.log(testEmail);
     if (testEmail === false) {
-        emailErrorMsg.textContent = 'Veuillez renseigner le champ "Email" correctement.';
-    }else{
+        emailErrorMsg.textContent = 'Veuillez renseigner le champ "Email" correctement. N\'oubliez pas l\'@.';
+    } else {
         emailErrorMsg.textContent = "";
     }
 }
@@ -441,27 +437,48 @@ function allInput() {
 
 /*--------------------------------------------------------------------------FONCTION FORMULAIRE--------------------------------------------------------------------------*/
 
-/**
- * Fonction permettant de passer la commander.
- */
-// function placeOrder() {
-//     if (cart > 0 && formCart) {
-
-//     }
-// }
 /* On écoute le bouton Commander au panier avec l'Evenement click*/
-const orderBtn = document.getElementById("order");
-orderBtn.addEventListener("click", function(e) {
-    if(allInput()){
-        const contact = {
-            firstName : firstName,
-            lastName : lastName,
-            address : address,
-            city : city,
-            email : email
-        }
+// const orderButton = document.getElementById("order");
+
+function orderButton() {
+    let cart = getCart();
+    if (cart.length == 0) {
+        alert("Vous n'avez aucun article dans votre panier.");
+        document.location.href="http://127.0.0.1:5501/front/html/index.html";
+        return false;
     }
-})
+    for (let i = 0; i < cart.length; i++) {
+        order.products.push(cart[i].id)
+    }
+    return true;
+}
+
+const testFirstName = document.getElementById("firstName").value;
+const testLastName = document.getElementById("lastName").value;
+const testAddress = document.getElementById("address").value;
+const testCity = document.getElementById("city").value;
+const testEmail = document.getElementById("email").value;
+
+const order = {
+    contact: {
+        firstName: testFirstName,
+        lastName: testLastName,
+        address: testAddress,
+        city: testCity,
+        email: testEmail
+    },
+    products: [],
+}
+console.log(order);
+
+function checkForm() {
+    let validateForm = validFirstName && validLastName && validAddress && validCity && validEmail;
+    return validateForm;
+}
+
+function listenOrderButton() {
+    orderButton();
+}
 
 // document.querySelector("#order").addEventListener("click", function(event) {
 //     console.log("Désolé ! preventDefault() ne vous laissera pas cocher ceci.");
@@ -470,14 +487,7 @@ orderBtn.addEventListener("click", function(e) {
 
 /*--------------------------------------------------------------------------EVENEMENT COMMANDE--------------------------------------------------------------------------*/
 
-/**
- * Ecoute de la fonction de commande.
- */
-// function listenPlaceOrder() {
-//     // Recuperation du bouton commander dans le DOM.
-//     let placeOrderButton = document.getElementById("order");
 
-// }
 
 /*--------------------------------------------------------------------------CHARGEMENT DE LA PAGE--------------------------------------------------------------------------*/
 
@@ -490,7 +500,7 @@ async function main() {
     getTotalPrice();
     listenChangeInput();
     listenDeleteItem();
-    // listenPlaceOrder();
     allInput();
+    listenOrderButton();
 }
 main();
