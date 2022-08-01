@@ -447,6 +447,7 @@ function orderButton() {
         document.location.href="http://127.0.0.1:5501/front/html/index.html";
         return false;
     }
+
     for (let i = 0; i < cart.length; i++) {
         order.products.push(cart[i].id)
     }
@@ -477,7 +478,10 @@ function checkForm() {
 }
 
 function listenOrderButton() {
-    orderButton();
+    // orderButton.addEventListener("click", function(){
+        orderButton();
+        checkForm();
+    // })
 }
 
 // document.querySelector("#order").addEventListener("click", function(event) {
