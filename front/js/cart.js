@@ -422,7 +422,6 @@ function allInput() {
 }
 
 /*--------------------------------------------------------------------------COMMANDE--------------------------------------------------------------------------*/
-
 // Requete POST pour passer commande.
 /* 1 - Evénement d'écoute au bouton (penser au event.preventDefault()).
 2 - Récupérer dans des constantes les firstName... (leurs valeurs)
@@ -435,63 +434,93 @@ function allInput() {
 "if (firstName && lastName && address && city && email)"
 "const firstName = document.getElementById("firstName").value;"*/
 
-/*--------------------------------------------------------------------------FONCTION FORMULAIRE--------------------------------------------------------------------------*/
-
-/* On écoute le bouton Commander au panier avec l'Evenement click*/
-// const orderButton = document.getElementById("order");
-
-function orderButton() {
-    let cart = getCart();
-    if (cart.length == 0) {
-        alert("Vous n'avez aucun article dans votre panier.");
-        document.location.href="http://127.0.0.1:5501/front/html/index.html";
-        return false;
-    }
-
-    for (let i = 0; i < cart.length; i++) {
-        order.products.push(cart[i].id)
-    }
-    return true;
-}
-
+/*--------------------------------------------------------------------------VARIABLES COMMANDE--------------------------------------------------------------------------*/
+const orderButton = document.getElementById("order");
 const testFirstName = document.getElementById("firstName").value;
 const testLastName = document.getElementById("lastName").value;
 const testAddress = document.getElementById("address").value;
 const testCity = document.getElementById("city").value;
 const testEmail = document.getElementById("email").value;
+let allProducts = [];
 
-const order = {
-    contact: {
-        firstName: testFirstName,
-        lastName: testLastName,
-        address: testAddress,
-        city: testCity,
-        email: testEmail
-    },
-    products: [],
+/*--------------------------------------------------------------------------OBJET COMMANDE--------------------------------------------------------------------------*/
+// Creation d'un objet recuperant les donnees du formulaire et les id presents dans le panier.
+    const order = {
+        contact: {
+            firstName: testFirstName,
+            lastName: testLastName,
+            address: testAddress,
+            city: testCity,
+            email: testEmail
+        },
+        allProducts: [],
+    }
+    console.log(order);
+
+/*--------------------------------------------------------------------------FONCTIONS COMMANDE--------------------------------------------------------------------------*/
+
+/**
+ * 
+ * @returns 
+ */
+function checkCart() {
+    let cart = getCart();
+    if (cart.length == 0) {
+        alert("Vous n'avez aucun article dans votre panier.");
+        document.location.href = "http://127.0.0.1:5501/front/html/index.html";
+        return false;
+    } else {
+        for (let i = 0; i < cart.length; i++) {
+            order.allProducts.push(cart[i].id);
+        }
+        return true;
+    }
 }
-console.log(order);
 
+/**
+ * 
+ * @returns 
+ */
 function checkForm() {
     let validateForm = validFirstName && validLastName && validAddress && validCity && validEmail;
     return validateForm;
 }
 
-function listenOrderButton() {
-    // orderButton.addEventListener("click", function(){
-        orderButton();
-        checkForm();
-    // })
-}
-
-// document.querySelector("#order").addEventListener("click", function(event) {
-//     console.log("Désolé ! preventDefault() ne vous laissera pas cocher ceci.");
-//     event.preventDefault();
-//   }, false);
-
 /*--------------------------------------------------------------------------EVENEMENT COMMANDE--------------------------------------------------------------------------*/
 
+/**
+ * On écoute le bouton Commander au panier avec l'Evenement click.
+ * @params
+ */
 
+function listenOrderButton() {
+    orderButton.addEventListener("click", function (event) {
+        if (checkForm() && checkCart()) {
+            event.preventDefault();
+            fetch('http://localhost:3000/api/products/order', {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(order),
+            })
+                .then(function (res) {
+                    res => res.json();
+                })
+                .then(function (data) {
+                    data => document.location.href = "confirmation.html?orderID="+data.orderID;
+                })
+                .catch(function (error) {
+                    alert("Le formulaire n'est pas correctement rempli ou le panier est vide.")
+                    console.log(error);
+                })
+        }
+    })
+    console.log("ici", order);
+    checkCart();
+    checkForm();
+}
 
 /*--------------------------------------------------------------------------CHARGEMENT DE LA PAGE--------------------------------------------------------------------------*/
 
