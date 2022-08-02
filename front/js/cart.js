@@ -441,44 +441,45 @@ const testLastName = document.getElementById("lastName").value;
 const testAddress = document.getElementById("address").value;
 const testCity = document.getElementById("city").value;
 const testEmail = document.getElementById("email").value;
+let cart = getCart();
 let allProducts = [];
 
-/*--------------------------------------------------------------------------OBJET COMMANDE--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------OBJETS COMMANDE--------------------------------------------------------------------------*/
 // Creation d'un objet recuperant les donnees du formulaire et les id presents dans le panier.
-    const order = {
-        contact: {
-            firstName: testFirstName,
-            lastName: testLastName,
-            address: testAddress,
-            city: testCity,
-            email: testEmail
-        },
-        allProducts: [],
-    }
-    console.log(order);
+const contact = {
+    firstName: testFirstName,
+    lastName: testLastName,
+    address: testAddress,
+    city: testCity,
+    email: testEmail,
+    allProducts: []
+}
+
+const order = {
+    contact: contact,
+    products: allProducts
+}
 
 /*--------------------------------------------------------------------------FONCTIONS COMMANDE--------------------------------------------------------------------------*/
-
 /**
- * 
+ * Fonction pour checker le panier de commande.
  * @returns 
  */
 function checkCart() {
-    let cart = getCart();
     if (cart.length == 0) {
         alert("Vous n'avez aucun article dans votre panier.");
         document.location.href = "http://127.0.0.1:5501/front/html/index.html";
         return false;
     } else {
         for (let i = 0; i < cart.length; i++) {
-            order.allProducts.push(cart[i].id);
+            allProducts.push(cart[i].id);
         }
         return true;
     }
 }
 
 /**
- * 
+ * Fonction pour checker le formulaire.
  * @returns 
  */
 function checkForm() {
@@ -490,12 +491,10 @@ function checkForm() {
 
 /**
  * On écoute le bouton Commander au panier avec l'Evenement click.
- * @params
  */
-
 function listenOrderButton() {
     orderButton.addEventListener("click", function (event) {
-        if (checkForm() && checkCart()) {
+        if (checkForm()) {
             event.preventDefault();
             fetch('http://localhost:3000/api/products/order', {
                 method: "POST",
@@ -509,7 +508,7 @@ function listenOrderButton() {
                     res => res.json();
                 })
                 .then(function (data) {
-                    data => document.location.href = "confirmation.html?orderID="+data.orderID;
+                    data => document.location.href = "confirmation.html?orderId=" + data.orderId;
                 })
                 .catch(function (error) {
                     alert("Le formulaire n'est pas correctement rempli ou le panier est vide.")
