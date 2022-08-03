@@ -34,7 +34,7 @@ function getCart() {
  * Fonction pour recuperer l'API.
  * @returns {array}
  */
-const fetchProducts = () => {
+const fetchProducts = function () {
     return fetch('http://localhost:3000/api/products') // On va chercher l'API avec la methode fetch.
         .then(res => res.json())
         .then(data => data) // On fait une promesse en renvoyant la réponse au format JSON. // On définit un paramètre pour products en réutilisant .then.
@@ -46,68 +46,67 @@ const fetchProducts = () => {
  * @param {*} products 
  * @param {*} articleToShow 
  */
-
 const showProducts = async (products, articleToShow) => {
 
-    // on ajoute l'element article
+    // Ajout de l'element article.
     let cartArticles = document.createElement("article");
     cartItems.appendChild(cartArticles);
     cartArticles.setAttribute("data-id", articleToShow.id);
     cartArticles.setAttribute("data-color", articleToShow.color)
     cartArticles.className = "cart__item";
 
-    // on ajoute l'element div qui va contenir l'img 
+    // Ajout de l'element div qui va contenir l'img.
     let divCartImages = document.createElement("div");
     divCartImages.className = "cart__item__img";
     cartArticles.appendChild(divCartImages);
 
-    // on ajoute l'élement img 
+    // Ajout de l'élement img.
     let cartImages = document.createElement("img");
     cartImages.setAttribute('src', products.imageUrl);
     cartImages.setAttribute('alt', products.altTxt);
     divCartImages.appendChild(cartImages);
 
-    // on ajoute une div
+    // Ajout d'une div.
     let divCartItems = document.createElement("div");
     divCartItems.className = "cart__item__content";
     cartArticles.appendChild(divCartItems);
 
-    // on ajoute une div
+    // Ajout d'une div.
     let divCartItemsDescription = document.createElement("div");
     divCartItemsDescription.className = "cart__item__content__description";
     divCartItems.appendChild(divCartItemsDescription);
 
-    // ajout du h2 qui va contenir le nom du produit
+    // Ajout du h2 qui va contenir le nom du produit.
     let divCartItemsDescriptionName = document.createElement("h2");
     divCartItemsDescription.appendChild(divCartItemsDescriptionName);
     divCartItemsDescriptionName.textContent = products.name;
 
-    // ajout d'un p qui va contenir la couleur du produit
+    // Ajout d'un p qui va contenir la couleur du produit.
     let divCartItemsDescriptionColor = document.createElement("p");
     divCartItemsDescription.appendChild(divCartItemsDescriptionColor);
     divCartItemsDescriptionColor.textContent = articleToShow.color;
 
-    // ajout d'un p qui va contenir le prix du produit
+    // Ajout d'un p qui va contenir le prix du produit.
     let divCartItemsDescriptionPrice = document.createElement("p");
     divCartItemsDescription.appendChild(divCartItemsDescriptionPrice);
-    divCartItemsDescriptionPrice.textContent = products.price + " €"; // ici le prix a été récupéré de l'api directement
+    divCartItemsDescriptionPrice.textContent = products.price + " €"; // Ici le prix a été récupéré de l'api directement.
 
-    // ajout d'une div    
+    // Ajout d'une div.
     let divCartItemsSetting = document.createElement("div");
     divCartItemsSetting.className = "cart__item__content__settings";
     divCartItems.appendChild(divCartItemsSetting);
 
-    // ajout d'une div
+    // Ajout d'une div.
     let divCartItemsSettingQuantity = document.createElement("div");
     divCartItemsSettingQuantity.className = "cart__item__content__settings__quantity";
     divCartItemsSetting.appendChild(divCartItemsSettingQuantity);
 
-    // ajout d'un p qui va contenir le mot "Qté :" 
+    // Ajout d'un p qui va contenir le mot "Qté :".
     let divCartItemsSettingQty = document.createElement("p");
     divCartItemsSettingQuantity.appendChild(divCartItemsSettingQty);
     divCartItemsSettingQty.textContent = "Qté : ";
 
-    // ajout de l'input qui va contenir la quantité 
+    // Ajout de l'input qui va contenir la quantité.
     let inputQuantity = document.createElement("input");
     divCartItemsSettingQuantity.appendChild(inputQuantity);
     inputQuantity.value = articleToShow.quantity;
@@ -117,12 +116,12 @@ const showProducts = async (products, articleToShow) => {
     inputQuantity.setAttribute("max", "100");
     inputQuantity.setAttribute("name", "itemQuantity");
 
-    // ajout d'une div   
+    // Ajout d'une div.
     let divCartItemsDelete = document.createElement("div");
     divCartItemsDelete.className = "cart__item__content__settings__delete";
     divCartItems.appendChild(divCartItemsDelete);
 
-    // ajout d'un p qui va contenir le bouton "Supprimer"   
+    // Ajout d'un p qui va contenir le bouton "Supprimer".
     let pDeleteItem = document.createElement("p");
     pDeleteItem.className = "deleteItem";
     divCartItemsDelete.appendChild(pDeleteItem);
@@ -138,7 +137,6 @@ async function displayAllProducts() {
     console.log(products);
     // Declaration d'une constante qui contiendra le LS.
     const cart = getCart();
-    // Remplacer cart par globalArray et supprimer la ligne const product.
     for (let articleToShow of cart) {
         const product = products.filter(p => p._id === articleToShow.id)
         showProducts(product[0], articleToShow);
@@ -324,9 +322,12 @@ let emailRegex = new RegExp("^[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-z]{2,
  * @param {*} inputFirstName 
  */
 function validFirstName(inputFirstName) {
+    // Declaration d'une variable contenant le test Regex.
     let testFirstName = textRegex.test(inputFirstName.value);
     console.log(testFirstName);
+    // Si le testRegex n'est pas bon.
     if (testFirstName === false) {
+        // Alors afficher un message d'erreur.
         firstNameErrorMsg.textContent = 'Veuillez renseigner le champ "Prénom" correctement.';
     } else {
         firstNameErrorMsg.textContent = "";
@@ -392,7 +393,7 @@ function validEmail(inputEmail) {
 /*--------------------------------------------------------------------------EVENEMENTS FORMULAIRE--------------------------------------------------------------------------*/
 
 /**
- * Fonction regroupant tout les eventListener des inputs du formulaire.
+ * Fonction d'ecoute regroupant tout les eventListener des inputs du formulaire.
  */
 function allInput() {
     formCart.firstName.addEventListener("change", function () {
@@ -435,6 +436,7 @@ function allInput() {
 "const firstName = document.getElementById("firstName").value;"*/
 
 /*--------------------------------------------------------------------------VARIABLES COMMANDE--------------------------------------------------------------------------*/
+// Declaration des variables utiles pour la partie commande de la page.
 const orderButton = document.getElementById("order");
 const testFirstName = document.getElementById("firstName").value;
 const testLastName = document.getElementById("lastName").value;
@@ -463,7 +465,6 @@ const order = {
 /*--------------------------------------------------------------------------FONCTIONS COMMANDE--------------------------------------------------------------------------*/
 /**
  * Fonction pour checker le panier de commande.
- * @returns 
  */
 function checkCart() {
     if (cart.length == 0) {
@@ -480,7 +481,6 @@ function checkCart() {
 
 /**
  * Fonction pour checker le formulaire.
- * @returns 
  */
 function checkForm() {
     let validateForm = validFirstName && validLastName && validAddress && validCity && validEmail;
@@ -505,15 +505,17 @@ function listenOrderButton() {
                 body: JSON.stringify(order),
             })
                 .then(function (res) {
-                    res => res.json();
+                    return res.json();
                 })
                 .then(function (data) {
-                    data => document.location.href = "confirmation.html?orderId=" + data.orderId;
+                    document.location.href = `./confirmation.html?orderId=${data.orderId}`;
                 })
                 .catch(function (error) {
-                    alert("Le formulaire n'est pas correctement rempli ou le panier est vide.")
+                    alert("Il y a une erreur" + error);
                     console.log(error);
                 })
+        }else{
+            alert("Veuillez remplir le formulaire avant de passer commande.")
         }
     })
     console.log("ici", order);

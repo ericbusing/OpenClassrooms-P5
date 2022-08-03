@@ -121,7 +121,9 @@ function addToCart(product) {
             // Appel de la fonction du localStorage.
             saveCart(cart);
             // Ajout d'une fenetre pop up signalant que le produit a ete ajoute au panier.
-            alert("Votre sélection est ajoutée au panier !")
+            if (window.confirm('Votre sélection est ajoutée au panier. Pour accéder au panier cliquez sur "OK", sinon "ANNULER".')) {
+                document.location.href = "http://127.0.0.1:5501/front/html/cart.html";
+            }
             // Retourne le produit incremente.
             return;
         }
@@ -130,7 +132,9 @@ function addToCart(product) {
     // Appel de la fonction du localStorage.
     saveCart(cart);
     // Ajout d'une fenetre pop up signalant que le produit a ete ajoute au panier.
-    alert("Votre sélection est ajoutée au panier !")
+    if (window.confirm('Votre sélection est ajoutée au panier. Pour accéder au panier cliquez sur "OK", sinon "ANNULER".')) {
+        document.location.href = "http://127.0.0.1:5501/front/html/cart.html";
+    }
     return;
 }
 
