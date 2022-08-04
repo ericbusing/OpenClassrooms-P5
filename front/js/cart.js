@@ -5,6 +5,7 @@
 let cartItems = document.getElementById("cart__items");
 
 /*--------------------------------------------------------------------------FONCTIONS PANIER--------------------------------------------------------------------------*/
+
 /**
  * Affichage du panier sous forme de string dans la console.
  * @param {array} cart
@@ -423,61 +424,15 @@ function allInput() {
 }
 
 /*--------------------------------------------------------------------------COMMANDE--------------------------------------------------------------------------*/
-// Requete POST pour passer commande.
-/* 1 - Evénement d'écoute au bouton (penser au event.preventDefault()).
-2 - Récupérer dans des constantes les firstName... (leurs valeurs)
-3 - Créer un objet contact qui contiendra les infos (exemple: const contact={firstName: firstName....}
-4 - Faire une condition de vérification "est-ce que mes inputs sont bien remplis"
-5 - Sont-ils valides ?
-6 - Basculer sur une autre fonction dans laquelle on va instaurer un tableau vide qui va accueillir tous les id des produits de ton cart
-7 - Créer un objet avec ce tableau et le contact que tu avais créé avant
-8 - fetch post dans lequel on en profitera pour aller faire notre document.location avec le orderId (clé qui est déterminée dans tes spects techniques 
-"if (firstName && lastName && address && city && email)"
-"const firstName = document.getElementById("firstName").value;"*/
 
 /*--------------------------------------------------------------------------VARIABLES COMMANDE--------------------------------------------------------------------------*/
+
 // Declaration des variables utiles pour la partie commande de la page.
 const orderButton = document.getElementById("order");
-const testFirstName = document.getElementById("firstName").value;
-const testLastName = document.getElementById("lastName").value;
-const testAddress = document.getElementById("address").value;
-const testCity = document.getElementById("city").value;
-const testEmail = document.getElementById("email").value;
 let cart = getCart();
 let allProducts = [];
 
-/*--------------------------------------------------------------------------OBJETS COMMANDE--------------------------------------------------------------------------*/
-// Creation d'un objet recuperant les donnees du formulaire et les id presents dans le panier.
-const contact = {
-    firstName: testFirstName,
-    lastName: testLastName,
-    address: testAddress,
-    city: testCity,
-    email: testEmail,
-    allProducts: []
-}
-
-const order = {
-    contact: contact,
-    products: allProducts
-}
-
 /*--------------------------------------------------------------------------FONCTIONS COMMANDE--------------------------------------------------------------------------*/
-/**
- * Fonction pour checker le panier de commande.
- */
-function checkCart() {
-    if (cart.length == 0) {
-        alert("Vous n'avez aucun article dans votre panier.");
-        document.location.href = "http://127.0.0.1:5501/front/html/index.html";
-        return false;
-    } else {
-        for (let i = 0; i < cart.length; i++) {
-            allProducts.push(cart[i].id);
-        }
-        return true;
-    }
-}
 
 /**
  * Fonction pour checker le formulaire.
@@ -487,40 +442,87 @@ function checkForm() {
     return validateForm;
 }
 
+/**
+ * Fonction pour verifier le contenu du panier.
+ */
+ function checkCart() {
+    // Si le panier est vide.
+    if (cart.length <= 0) {
+        // Afficher un message d'alerte redirigeant vers la page d'accueil.
+        alert("Vous n'avez aucun article dans votre panier.");
+        document.location.href = "http://127.0.0.1:5501/front/html/index.html";
+    } else {
+        // Sinon, push les produits du panier dans allProducts.
+        for (let i = 0; i < cart.length; i++) {
+            allProducts.push(cart[i].id);
+        }
+    }
+}
+
+/**
+ * Fonction qui permet d'envoyer un requete POST avec les coordonnees client et les produits commandes.
+ * @param {array} contact 
+ */
+function validateOrder(contact) {
+    // Declaration d'un objet contenant la synthaxe des coordonnees client + les produits choisis par celui-ci.
+    const order = {
+        contact: contact,
+        products: allProducts
+    }
+    fetch('http://localhost:3000/api/products/order', {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(order),
+    })
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (data) {
+            // Redirection vers la page confirmation avec un orderId.
+            document.location.href = `./confirmation.html?orderId=${data.orderId}`;
+        })
+        .catch(function (error) {
+            alert("Il y a une erreur" + error);
+            console.log(error);
+        })
+}
+
 /*--------------------------------------------------------------------------EVENEMENT COMMANDE--------------------------------------------------------------------------*/
 
 /**
- * On écoute le bouton Commander au panier avec l'Evenement click.
+ * On écoute le bouton Commander au panier avec l'evenement click.
  */
 function listenOrderButton() {
     orderButton.addEventListener("click", function (event) {
-        if (checkForm()) {
+        // Déclaration des constantes afin de recuperer les values des inputs.
+        const testFirstName = document.getElementById("firstName").value;
+        const testLastName = document.getElementById("lastName").value;
+        const testAddress = document.getElementById("address").value;
+        const testCity = document.getElementById("city").value;
+        const testEmail = document.getElementById("email").value;
+        // Déclaration d'un objet contenant le resultat des inputs.
+        const contact = {
+            firstName: testFirstName,
+            lastName: testLastName,
+            address: testAddress,
+            city: testCity,
+            email: testEmail
+        }
+        // Si les inputs sont correctements remplis.
+        if (testFirstName && testLastName && testAddress && testCity && testEmail) {
             event.preventDefault();
-            fetch('http://localhost:3000/api/products/order', {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(order),
-            })
-                .then(function (res) {
-                    return res.json();
-                })
-                .then(function (data) {
-                    document.location.href = `./confirmation.html?orderId=${data.orderId}`;
-                })
-                .catch(function (error) {
-                    alert("Il y a une erreur" + error);
-                    console.log(error);
-                })
-        }else{
-            alert("Veuillez remplir le formulaire avant de passer commande.")
+            if (checkForm()) {
+                // Alors valider la commande.
+                validateOrder(contact);
+            }
+        } else {
+            // Sinon, afficher un message d'erreur et ne pas prendre la commande.
+            alert("Veuillez remplir tout les champs du formulaire avant de passer commande.");
         }
     })
-    console.log("ici", order);
-    checkCart();
-    checkForm();
 }
 
 /*--------------------------------------------------------------------------CHARGEMENT DE LA PAGE--------------------------------------------------------------------------*/
@@ -535,6 +537,7 @@ async function main() {
     listenChangeInput();
     listenDeleteItem();
     allInput();
+    checkCart();
     listenOrderButton();
 }
 main();
