@@ -97,10 +97,12 @@ function saveCart(cart) {
 function getCart() {
     // Recuperation de l'item cart.
     let cart = localStorage.getItem("cart");
-    // Creation d'un tableau si le panier est vide.
+    // Si le panier est vide.
     if (cart == null) {
+        // Alors renvoyer un array vide.
         return [];
     } else {
+        // Sinon, renvoyer le contenu du panier.
         return JSON.parse(cart);
     }
 }
