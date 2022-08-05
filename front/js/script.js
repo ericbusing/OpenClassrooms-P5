@@ -3,7 +3,7 @@
 // Recuperation des donnees sur l'API.
 fetch("http://localhost:3000/api/products")
   .then(function (response) {
-    console.log(response);
+    // console.log(response);
     // Utilisation d'une condition pour l'affichage des produits dans la console.
     if (response.ok) {
       return response.json();
@@ -12,11 +12,11 @@ fetch("http://localhost:3000/api/products")
 
   // Exploitation des donnees.
   .then(function (elements) {
-    console.log(elements);
+    // console.log(elements);
     // Boucle pour afficher chaque produits present dans l'API.
     for (let element of elements) {
       //Utilisation de la structure HTML utile pour l'affichage des produits. 
-      console.log(element);
+      // console.log(element);
       // Appel de l'element parent.
       const items = document.getElementById("items");
       // Creation de la balise "a".
@@ -51,6 +51,6 @@ fetch("http://localhost:3000/api/products")
   
   .catch(function (err) {
     // Gestion des erreurs.
-    console.log("ERREUR", err);
+    // console.log("ERREUR", err);
     alert("ERREUR API");
   })

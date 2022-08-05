@@ -30,7 +30,7 @@ const getElement = function (id) {
     // Ajout de l'ID sur l'URL.
     fetch(`http://localhost:3000/api/products/${id}`)
         .then(function (response) {
-            console.log(response);
+            // console.log(response);
             // Utilisation d'une condition pour l'affichage de la reponse dans la console.
             if (response.ok) {
                 return response.json();
@@ -39,8 +39,8 @@ const getElement = function (id) {
 
         .then(function (article) {
             // Affichage du produit voulu dans la console.
-            console.log(article);
-            console.log(article.colors);
+            // console.log(article);
+            // console.log(article.colors);
             setColorSelect(article.colors);
             setHTML(article);
         })
@@ -57,7 +57,7 @@ const setHTML = function (article) {
     imageContainer.setAttribute("src", article.imageUrl);
     imageContainer.setAttribute("alt", article.altTxt);
     elementImage.appendChild(imageContainer);
-    console.log(imageContainer);
+    // console.log(imageContainer);
     elementName.textContent = article.name;
     elementPrice.textContent = article.price;
     elementDescription.textContent = article.description;
@@ -70,7 +70,7 @@ const setHTML = function (article) {
 const setColorSelect = function (colors) {
     let domColors = document.getElementById("colors");
     // Affichage des couleurs dans la console.
-    console.log(domColors);
+    // console.log(domColors);
     for (let color of colors) {
         let option = document.createElement("option");
         option.textContent = color;
@@ -155,10 +155,10 @@ function listenElementCart() {
         };
         // Condition de check si les fonctions de quantite et de couleur fonctionne bien.
         if (checkQuantity() && checkColor()) {
-            console.log("Commande passée !");
+            // console.log("Commande passée !");
             addToCart(product);
         };
-        console.log(product);
+        // console.log(product);
     });
 }
 
@@ -169,10 +169,10 @@ function listenElementCart() {
 function checkColor() {
     // Recuperer la valeur des couleurs saisie par l'utilisateur.
     let colorOrder = document.getElementById("colors").value;
-    console.log(colorOrder);
+    // console.log(colorOrder);
     // Si la couleur contient plus de 0 caracteres.
     if (colorOrder > [0]) {
-        console.log("Couleur ok");
+        // console.log("Couleur ok");
         // Valider la commande.
         return true;
         // Sinon ne pas valider et afficher un message d'erreur.
@@ -189,10 +189,10 @@ function checkColor() {
 function checkQuantity() {
     // Recuperer la valeur de la quantite saisie par l'utilisateur.
     let quantityOrder = document.getElementById("quantity").value;
-    console.log(quantityOrder);
+    // console.log(quantityOrder);
     // Si la quantite saisie se trouve entre 1 et 100.
     if (quantityOrder > 0 && quantityOrder < 100) {
-        console.log("Quantité ok");
+        // console.log("Quantité ok");
         // Valider la commande.
         return true;
         // Sinon ne pas valider et afficher un message d'erreur.
@@ -209,7 +209,7 @@ function checkQuantity() {
  */
 function main() {
     let productId = getIdFromUrl();
-    console.log(productId);
+    // console.log(productId);
     getElement(productId);
     listenElementCart();
 }
