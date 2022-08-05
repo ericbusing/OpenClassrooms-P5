@@ -212,6 +212,15 @@ function changeQuantity(id, color, quantity) {
             // Mise a jour du panier.
             saveCart(cart);
             // console.log("Quantité modifié !");
+            if (cart[i].quantity > 0 && cart[i].quantity <= 100) {
+                // console.log("Quantité ok");
+                // Valider la commande.
+                return true;
+                // Sinon ne pas valider et afficher un message d'erreur.
+            } else {
+                alert("Veuillez saisir une quantité entre 1 et 100.");
+                return false;
+            }
         }
     }
     // Appel des fonctions pour les totaux afin que ceux-ci se mettent ajour lors du changement de quantite.
@@ -445,7 +454,7 @@ function checkForm() {
 /**
  * Fonction pour verifier le contenu du panier.
  */
- function checkCart() {
+function checkCart() {
     // Si le panier est vide.
     if (cart.length <= 0) {
         // Afficher un message d'alerte redirigeant vers la page d'accueil.
