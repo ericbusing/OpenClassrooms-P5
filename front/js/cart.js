@@ -5,6 +5,7 @@
 let cartItems = document.getElementById("cart__items");
 
 /*--------------------------------------------------------------------------FONCTIONS PANIER--------------------------------------------------------------------------*/
+
 /**
  * Affichage du panier sous forme de string dans la console.
  * @param {array} cart
@@ -134,7 +135,7 @@ const showProducts = async (products, articleToShow) => {
 async function displayAllProducts() {
     // Declaration d'une constante qui contiendra l'API.
     const products = await fetchProducts();
-    console.log(products);
+    // console.log(products);
     // Declaration d'une constante qui contiendra le LS.
     const cart = getCart();
     for (let articleToShow of cart) {
@@ -152,11 +153,11 @@ function getTotalQuantity() {
     // Declaration de la variable representant le total quantite.
     let totalQuantity = 0;
     let cart = getCart();
-    console.log(`la quantité est de ${totalQuantity} avec un panier vide.`);
+    // console.log(`la quantité est de ${totalQuantity} avec un panier vide.`);
     // Boucle pour calcul de la quantite globale.
     for (let number of cart) {
         let productsInCart = number.quantity;
-        console.log(`la quantité du canapé est de ${productsInCart}.`);
+        // console.log(`la quantité du canapé est de ${productsInCart}.`);
         // Calcul total produits dans le panier.
         totalQuantity += productsInCart;
     }
@@ -174,7 +175,7 @@ async function getTotalPrice() {
     let cart = getCart();
     // Declaration de la variable representant le prix total.
     let totalPrice = 0;
-    console.log(`le prix est de ${totalPrice}€ avec un panier vide.`);
+    // console.log(`le prix est de ${totalPrice}€ avec un panier vide.`);
     // Boucles pour calcul prix global.
     // Boucle cherchant dans le LS.
     for (let i in cart) {
@@ -182,7 +183,7 @@ async function getTotalPrice() {
         for (let j in API) {
             const priceOfProduct = API[j].price;
             const idOfProduct = API[j]._id;
-            console.log(priceOfProduct);
+            // console.log(priceOfProduct);
             if (cart[i].id === idOfProduct) {
                 // Calcul total prix.
                 totalPrice += cart[i].quantity * priceOfProduct;
@@ -210,7 +211,12 @@ function changeQuantity(id, color, quantity) {
             cart[i].quantity = quantity;
             // Mise a jour du panier.
             saveCart(cart);
-            console.log("Quantité modifié !");
+            // console.log("Quantité modifié !");
+            if (cart[i].quantity > 0 && cart[i].quantity <= 100) {
+                // console.log("Quantité ok");
+            }else{
+                alert("Veuillez saisir une quantité entre 1 et 100.")
+            }
         }
     }
     // Appel des fonctions pour les totaux afin que ceux-ci se mettent ajour lors du changement de quantite.
@@ -235,7 +241,7 @@ function deleteItem(id, color) {
             saveCart(cart);
             // Rechargement de la page pour la mettre a jour.
             location.reload();
-            console.log("Quantité supprimée !");
+            // console.log("Quantité supprimée !");
         }
     }
 }
@@ -251,7 +257,7 @@ function listenChangeInput() {
     for (let item of changeInput) {
         // Methode d'ecoute pour le bouton "Qté".
         item.addEventListener("change", function (event) {
-            console.log(changeInput);
+            // console.log(changeInput);
             // Constante ciblant l'element parent.
             const parent = event.target.closest("article");
             // Constante recuperant la data-id present dans article.
@@ -259,7 +265,7 @@ function listenChangeInput() {
             // Constante recuperant la data-color present dans article.
             const dataColor = parent.dataset.color;
             const newQty = parseInt(event.target.value);
-            console.log(dataId, dataColor, newQty);
+            // console.log(dataId, dataColor, newQty);
             // Appel de la fonction de changement de quantite, avec les constantes instentiees au-dessus, en parametre.
             changeQuantity(dataId, dataColor, newQty);
         })
@@ -275,14 +281,14 @@ function listenDeleteItem() {
     for (let item of deleteProduct) {
         // Methode d'ecoute pour le bouton "Supprimer".
         item.addEventListener("click", function (event) {
-            console.log(deleteProduct);
+            // console.log(deleteProduct);
             // Constante ciblant l'element parent.
             const parent = event.target.closest("article");
             // Constante recuperant la data-id present dans article.
             const dataId = parent.dataset.id;
             // Constante recuperant la data-color present dans article.
             const dataColor = parent.dataset.color;
-            console.log(dataId, dataColor);
+            // console.log(dataId, dataColor);
             // Condition avec une fenetre demandant confirmation de suppression.
             if (window.confirm(`Êtes-vous sûr de vouloir supprimer cet article ? Si oui cliquez sur "OK" sinon "ANNULER".`)) {
                 // Appel de la fonction de suppression, avec les constantes instentiees au-dessus, en parametre.
@@ -324,7 +330,7 @@ let emailRegex = new RegExp("^[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-z]{2,
 function validFirstName(inputFirstName) {
     // Declaration d'une variable contenant le test Regex.
     let testFirstName = textRegex.test(inputFirstName.value);
-    console.log(testFirstName);
+    // console.log(testFirstName);
     // Si le testRegex n'est pas bon.
     if (testFirstName === false) {
         // Alors afficher un message d'erreur.
@@ -340,7 +346,7 @@ function validFirstName(inputFirstName) {
  */
 function validLastName(inputLastName) {
     let testLastName = textRegex.test(inputLastName.value);
-    console.log(testLastName);
+    // console.log(testLastName);
     if (testLastName === false) {
         lastNameErrorMsg.textContent = 'Veuillez renseigner le champ "Nom" correctement.';
     } else {
@@ -354,7 +360,7 @@ function validLastName(inputLastName) {
  */
 function validAddress(inputAddress) {
     let testAddress = addressRegex.test(inputAddress.value);
-    console.log(testAddress);
+    // console.log(testAddress);
     if (testAddress === false) {
         addressErrorMsg.textContent = 'Veuillez renseigner le champ "Adresse" correctement.';
     } else {
@@ -368,7 +374,7 @@ function validAddress(inputAddress) {
  */
 function validCity(inputCity) {
     let testCity = textRegex.test(inputCity.value);
-    console.log(testCity);
+    // console.log(testCity);
     if (testCity === false) {
         cityErrorMsg.textContent = 'Veuillez renseigner le champ "Ville" correctement.';
     } else {
@@ -382,7 +388,7 @@ function validCity(inputCity) {
  */
 function validEmail(inputEmail) {
     let testEmail = emailRegex.test(inputEmail.value);
-    console.log(testEmail);
+    // console.log(testEmail);
     if (testEmail === false) {
         emailErrorMsg.textContent = 'Veuillez renseigner le champ "Email" correctement. N\'oubliez pas l\'@.';
     } else {
@@ -399,85 +405,39 @@ function allInput() {
     formCart.firstName.addEventListener("change", function () {
         validFirstName(this);
     });
-    console.log(formCart.firstName);
+    // console.log(formCart.firstName);
 
     formCart.lastName.addEventListener("change", function () {
         validLastName(this);
     });
-    console.log(formCart.lastName);
+    // console.log(formCart.lastName);
 
     formCart.address.addEventListener("change", function () {
         validAddress(this);
     });
-    console.log(formCart.address);
+    // console.log(formCart.address);
 
     formCart.city.addEventListener("change", function () {
         validCity(this);
     });
-    console.log(formCart.city);
+    // console.log(formCart.city);
 
     formCart.email.addEventListener("change", function () {
         validEmail(this);
     });
-    console.log(formCart.email);
+    // console.log(formCart.email);
 }
 
 /*--------------------------------------------------------------------------COMMANDE--------------------------------------------------------------------------*/
-// Requete POST pour passer commande.
-/* 1 - Evénement d'écoute au bouton (penser au event.preventDefault()).
-2 - Récupérer dans des constantes les firstName... (leurs valeurs)
-3 - Créer un objet contact qui contiendra les infos (exemple: const contact={firstName: firstName....}
-4 - Faire une condition de vérification "est-ce que mes inputs sont bien remplis"
-5 - Sont-ils valides ?
-6 - Basculer sur une autre fonction dans laquelle on va instaurer un tableau vide qui va accueillir tous les id des produits de ton cart
-7 - Créer un objet avec ce tableau et le contact que tu avais créé avant
-8 - fetch post dans lequel on en profitera pour aller faire notre document.location avec le orderId (clé qui est déterminée dans tes spects techniques 
-"if (firstName && lastName && address && city && email)"
-"const firstName = document.getElementById("firstName").value;"*/
 
 /*--------------------------------------------------------------------------VARIABLES COMMANDE--------------------------------------------------------------------------*/
+
 // Declaration des variables utiles pour la partie commande de la page.
 const orderButton = document.getElementById("order");
-const testFirstName = document.getElementById("firstName").value;
-const testLastName = document.getElementById("lastName").value;
-const testAddress = document.getElementById("address").value;
-const testCity = document.getElementById("city").value;
-const testEmail = document.getElementById("email").value;
 let cart = getCart();
 let allProducts = [];
 
-/*--------------------------------------------------------------------------OBJETS COMMANDE--------------------------------------------------------------------------*/
-// Creation d'un objet recuperant les donnees du formulaire et les id presents dans le panier.
-const contact = {
-    firstName: testFirstName,
-    lastName: testLastName,
-    address: testAddress,
-    city: testCity,
-    email: testEmail,
-    allProducts: []
-}
-
-const order = {
-    contact: contact,
-    products: allProducts
-}
-
 /*--------------------------------------------------------------------------FONCTIONS COMMANDE--------------------------------------------------------------------------*/
-/**
- * Fonction pour checker le panier de commande.
- */
-function checkCart() {
-    if (cart.length == 0) {
-        alert("Vous n'avez aucun article dans votre panier.");
-        document.location.href = "http://127.0.0.1:5501/front/html/index.html";
-        return false;
-    } else {
-        for (let i = 0; i < cart.length; i++) {
-            allProducts.push(cart[i].id);
-        }
-        return true;
-    }
-}
 
 /**
  * Fonction pour checker le formulaire.
@@ -487,40 +447,87 @@ function checkForm() {
     return validateForm;
 }
 
+/**
+ * Fonction pour verifier le contenu du panier.
+ */
+function checkCart() {
+    // Si le panier est vide.
+    if (cart.length <= 0) {
+        // Afficher un message d'alerte redirigeant vers la page d'accueil.
+        alert("Vous n'avez aucun article dans votre panier.");
+        document.location.href = "./index.html";
+    } else {
+        // Sinon, push les produits du panier dans allProducts.
+        for (let i = 0; i < cart.length; i++) {
+            allProducts.push(cart[i].id);
+        }
+    }
+}
+
+/**
+ * Fonction qui permet d'envoyer un requete POST avec les coordonnees client et les produits commandes.
+ * @param {array} contact 
+ */
+function validateOrder(contact) {
+    // Declaration d'un objet contenant la synthaxe des coordonnees client + les produits choisis par celui-ci.
+    const order = {
+        contact: contact,
+        products: allProducts
+    }
+    fetch('http://localhost:3000/api/products/order', {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(order),
+    })
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (data) {
+            // Redirection vers la page confirmation avec un orderId.
+            document.location.href = `./confirmation.html?orderId=${data.orderId}`;
+        })
+        .catch(function (error) {
+            alert("Il y a une erreur" + error);
+            // console.log(error);
+        })
+}
+
 /*--------------------------------------------------------------------------EVENEMENT COMMANDE--------------------------------------------------------------------------*/
 
 /**
- * On écoute le bouton Commander au panier avec l'Evenement click.
+ * On écoute le bouton Commander au panier avec l'evenement click.
  */
 function listenOrderButton() {
     orderButton.addEventListener("click", function (event) {
-        if (checkForm()) {
+        // Déclaration des constantes afin de recuperer les values des inputs.
+        const testFirstName = document.getElementById("firstName").value;
+        const testLastName = document.getElementById("lastName").value;
+        const testAddress = document.getElementById("address").value;
+        const testCity = document.getElementById("city").value;
+        const testEmail = document.getElementById("email").value;
+        // Déclaration d'un objet contenant le resultat des inputs.
+        const contact = {
+            firstName: testFirstName,
+            lastName: testLastName,
+            address: testAddress,
+            city: testCity,
+            email: testEmail
+        }
+        // Si les inputs sont correctements remplis.
+        if (testFirstName && testLastName && testAddress && testCity && testEmail) {
             event.preventDefault();
-            fetch('http://localhost:3000/api/products/order', {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(order),
-            })
-                .then(function (res) {
-                    return res.json();
-                })
-                .then(function (data) {
-                    document.location.href = `./confirmation.html?orderId=${data.orderId}`;
-                })
-                .catch(function (error) {
-                    alert("Il y a une erreur" + error);
-                    console.log(error);
-                })
-        }else{
-            alert("Veuillez remplir le formulaire avant de passer commande.")
+            if (checkForm()) {
+                // Alors valider la commande.
+                validateOrder(contact);
+            }
+        } else {
+            // Sinon, afficher un message d'erreur et ne pas prendre la commande.
+            alert("Veuillez remplir tout les champs du formulaire avant de passer commande.");
         }
     })
-    console.log("ici", order);
-    checkCart();
-    checkForm();
 }
 
 /*--------------------------------------------------------------------------CHARGEMENT DE LA PAGE--------------------------------------------------------------------------*/
@@ -535,6 +542,7 @@ async function main() {
     listenChangeInput();
     listenDeleteItem();
     allInput();
+    checkCart();
     listenOrderButton();
 }
 main();
