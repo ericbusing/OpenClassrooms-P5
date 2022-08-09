@@ -191,7 +191,7 @@ function checkQuantity() {
     let quantityOrder = document.getElementById("quantity").value;
     // console.log(quantityOrder);
     // Si la quantite saisie se trouve entre 1 et 100.
-    if (quantityOrder > 0 && quantityOrder <= 100) {
+    if (quantityOrder > 0 && quantityOrder < 100) {
         // console.log("Quantité ok");
         // Valider la commande.
         return true;

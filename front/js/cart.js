@@ -214,8 +214,10 @@ function changeQuantity(id, color, quantity) {
             // console.log("Quantité modifié !");
             if (cart[i].quantity > 0 && cart[i].quantity <= 100) {
                 // console.log("Quantité ok");
+                // Sinon ne pas valider et afficher un message d'erreur.
             }else{
-                alert("Veuillez saisir une quantité entre 1 et 100.")
+                // alert("Veuillez saisir une quantité entre 1 et 100.");
+                return false;
             }
         }
     }
@@ -267,7 +269,12 @@ function listenChangeInput() {
             const newQty = parseInt(event.target.value);
             // console.log(dataId, dataColor, newQty);
             // Appel de la fonction de changement de quantite, avec les constantes instentiees au-dessus, en parametre.
-            changeQuantity(dataId, dataColor, newQty);
+            console.log(event);
+            if (newQty > 0 && newQty <= 100) {
+                changeQuantity(dataId, dataColor, newQty);
+            } else {
+                alert("Veuillez saisir une quantité entre 1 et 100.");
+            }
         })
     }
 }
