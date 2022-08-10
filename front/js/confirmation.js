@@ -10,7 +10,7 @@ let url = new URL(currentURL);
 function displayOrderNum(url){
   document.getElementById("orderId").textContent = url.searchParams.get("orderId");
   // Vider le LS une fois la commande passee.
-  localStorage.clear();
+  // localStorage.clear();
 }
 
 /*--------------------------------------------------------------------------CHARGEMENT DE LA PAGE--------------------------------------------------------------------------*/

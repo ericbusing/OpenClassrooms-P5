@@ -135,7 +135,6 @@ const showProducts = async (products, articleToShow) => {
 async function displayAllProducts() {
     // Declaration d'une constante qui contiendra l'API.
     const products = await fetchProducts();
-    // console.log(products);
     // Declaration d'une constante qui contiendra le LS.
     const cart = getCart();
     for (let articleToShow of cart) {
@@ -153,11 +152,9 @@ function getTotalQuantity() {
     // Declaration de la variable representant le total quantite.
     let totalQuantity = 0;
     let cart = getCart();
-    // console.log(`la quantité est de ${totalQuantity} avec un panier vide.`);
     // Boucle pour calcul de la quantite globale.
     for (let number of cart) {
         let productsInCart = number.quantity;
-        // console.log(`la quantité du canapé est de ${productsInCart}.`);
         // Calcul total produits dans le panier.
         totalQuantity += productsInCart;
     }
@@ -175,7 +172,6 @@ async function getTotalPrice() {
     let cart = getCart();
     // Declaration de la variable representant le prix total.
     let totalPrice = 0;
-    // console.log(`le prix est de ${totalPrice}€ avec un panier vide.`);
     // Boucles pour calcul prix global.
     // Boucle cherchant dans le LS.
     for (let i in cart) {
@@ -183,7 +179,6 @@ async function getTotalPrice() {
         for (let j in API) {
             const priceOfProduct = API[j].price;
             const idOfProduct = API[j]._id;
-            // console.log(priceOfProduct);
             if (cart[i].id === idOfProduct) {
                 // Calcul total prix.
                 totalPrice += cart[i].quantity * priceOfProduct;
@@ -211,12 +206,9 @@ function changeQuantity(id, color, quantity) {
             cart[i].quantity = quantity;
             // Mise a jour du panier.
             saveCart(cart);
-            // console.log("Quantité modifié !");
             if (cart[i].quantity > 0 && cart[i].quantity <= 100) {
-                // console.log("Quantité ok");
                 // Sinon ne pas valider et afficher un message d'erreur.
-            }else{
-                // alert("Veuillez saisir une quantité entre 1 et 100.");
+            } else {
                 return false;
             }
         }
@@ -243,7 +235,6 @@ function deleteItem(id, color) {
             saveCart(cart);
             // Rechargement de la page pour la mettre a jour.
             location.reload();
-            // console.log("Quantité supprimée !");
         }
     }
 }
@@ -259,7 +250,6 @@ function listenChangeInput() {
     for (let item of changeInput) {
         // Methode d'ecoute pour le bouton "Qté".
         item.addEventListener("change", function (event) {
-            // console.log(changeInput);
             // Constante ciblant l'element parent.
             const parent = event.target.closest("article");
             // Constante recuperant la data-id present dans article.
@@ -267,7 +257,6 @@ function listenChangeInput() {
             // Constante recuperant la data-color present dans article.
             const dataColor = parent.dataset.color;
             const newQty = parseInt(event.target.value);
-            // console.log(dataId, dataColor, newQty);
             // Appel de la fonction de changement de quantite, avec les constantes instentiees au-dessus, en parametre.
             console.log(event);
             if (newQty > 0 && newQty <= 100) {
@@ -288,14 +277,12 @@ function listenDeleteItem() {
     for (let item of deleteProduct) {
         // Methode d'ecoute pour le bouton "Supprimer".
         item.addEventListener("click", function (event) {
-            // console.log(deleteProduct);
             // Constante ciblant l'element parent.
             const parent = event.target.closest("article");
             // Constante recuperant la data-id present dans article.
             const dataId = parent.dataset.id;
             // Constante recuperant la data-color present dans article.
             const dataColor = parent.dataset.color;
-            // console.log(dataId, dataColor);
             // Condition avec une fenetre demandant confirmation de suppression.
             if (window.confirm(`Êtes-vous sûr de vouloir supprimer cet article ? Si oui cliquez sur "OK" sinon "ANNULER".`)) {
                 // Appel de la fonction de suppression, avec les constantes instentiees au-dessus, en parametre.
@@ -311,6 +298,8 @@ function listenDeleteItem() {
 
 // Declaration de la variable servant a recuperer le formulaire dans le DOM.
 let formCart = document.querySelector(".cart__order__form");
+// const inputFirst = document.querySelector('#firstName');
+// inputFirst.setAttribute('minlenght', 2);
 
 // Declaration des variables servant a recuperer les messages d'erreur.
 let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
@@ -324,7 +313,7 @@ let emailErrorMsg = document.getElementById("emailErrorMsg");
 On ajoute le "+" pour peciser qu'ils peuvent etre ecrit plusieurs fois. 
 Le "^" désigne le début de la RegExp, les crochet le contenu de celle-ci et le "$" la fin.
 Le "g" est un flag qui signifie que l'on veut chercher dans le global du formulaire.*/
-let textRegex = new RegExp("^[a-zA-ZÀ-ÿ-]+$");
+let textRegex = new RegExp("^([a-zA-Z,éêèàëÉÈÊË.'-]+[ ]?){3,}$");
 let addressRegex = new RegExp("^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
 let emailRegex = new RegExp("^[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-z]{2,10}$");
 
@@ -334,10 +323,10 @@ let emailRegex = new RegExp("^[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-z]{2,
  * Fonction pour l'input prenom.
  * @param {*} inputFirstName 
  */
-function validFirstName(inputFirstName) {
+function validFirstName() {
+    let inputFirstName = document.getElementById("firstName").value;
     // Declaration d'une variable contenant le test Regex.
-    let testFirstName = textRegex.test(inputFirstName.value);
-    // console.log(testFirstName);
+    let testFirstName = textRegex.test(inputFirstName);
     // Si le testRegex n'est pas bon.
     if (testFirstName === false) {
         // Alors afficher un message d'erreur.
@@ -351,9 +340,9 @@ function validFirstName(inputFirstName) {
  * Fonction pour l'input nom.
  * @param {*} inputLastName 
  */
-function validLastName(inputLastName) {
-    let testLastName = textRegex.test(inputLastName.value);
-    // console.log(testLastName);
+function validLastName() {
+    let inputLastName = document.getElementById("lastName").value;
+    let testLastName = textRegex.test(inputLastName);
     if (testLastName === false) {
         lastNameErrorMsg.textContent = 'Veuillez renseigner le champ "Nom" correctement.';
     } else {
@@ -365,9 +354,9 @@ function validLastName(inputLastName) {
  * Fonction pour l'input adresse.
  * @param {*} inputAddress 
  */
-function validAddress(inputAddress) {
-    let testAddress = addressRegex.test(inputAddress.value);
-    // console.log(testAddress);
+function validAddress() {
+    let inputAddress = document.getElementById("address").value;
+    let testAddress = addressRegex.test(inputAddress);
     if (testAddress === false) {
         addressErrorMsg.textContent = 'Veuillez renseigner le champ "Adresse" correctement.';
     } else {
@@ -379,9 +368,9 @@ function validAddress(inputAddress) {
  * Fonction pour l'input ville.
  * @param {*} inputCity 
  */
-function validCity(inputCity) {
-    let testCity = textRegex.test(inputCity.value);
-    // console.log(testCity);
+function validCity() {
+    let inputCity = document.getElementById("city").value;
+    let testCity = textRegex.test(inputCity);
     if (testCity === false) {
         cityErrorMsg.textContent = 'Veuillez renseigner le champ "Ville" correctement.';
     } else {
@@ -393,9 +382,9 @@ function validCity(inputCity) {
  * Fonction pour l'input email.
  * @param {*} inputEmail 
  */
-function validEmail(inputEmail) {
-    let testEmail = emailRegex.test(inputEmail.value);
-    // console.log(testEmail);
+function validEmail() {
+    let inputEmail = document.getElementById("email").value;
+    let testEmail = emailRegex.test(inputEmail);
     if (testEmail === false) {
         emailErrorMsg.textContent = 'Veuillez renseigner le champ "Email" correctement. N\'oubliez pas l\'@.';
     } else {
@@ -410,29 +399,24 @@ function validEmail(inputEmail) {
  */
 function allInput() {
     formCart.firstName.addEventListener("change", function () {
-        validFirstName(this);
+        validFirstName();
     });
-    // console.log(formCart.firstName);
 
     formCart.lastName.addEventListener("change", function () {
-        validLastName(this);
+        validLastName();
     });
-    // console.log(formCart.lastName);
 
     formCart.address.addEventListener("change", function () {
-        validAddress(this);
+        validAddress();
     });
-    // console.log(formCart.address);
 
     formCart.city.addEventListener("change", function () {
-        validCity(this);
+        validCity();
     });
-    // console.log(formCart.city);
 
     formCart.email.addEventListener("change", function () {
-        validEmail(this);
+        validEmail();
     });
-    // console.log(formCart.email);
 }
 
 /*--------------------------------------------------------------------------COMMANDE--------------------------------------------------------------------------*/
@@ -450,8 +434,13 @@ let allProducts = [];
  * Fonction pour checker le formulaire.
  */
 function checkForm() {
-    let validateForm = validFirstName && validLastName && validAddress && validCity && validEmail;
-    return validateForm;
+    let validateForm = validFirstName() && validLastName() && validAddress() && validCity() && validEmail();
+    // if (validFirstName() && validLastName() && validAddress() && validCity() && validEmail()) {
+        return true;
+    // }else{
+    //     alert("Veuillez remplir correctement tout les champs du formulaire avant de passer commande.");
+    //     // return false;
+    // }
 }
 
 /**
@@ -462,7 +451,7 @@ function checkCart() {
     if (cart.length <= 0) {
         // Afficher un message d'alerte redirigeant vers la page d'accueil.
         alert("Vous n'avez aucun article dans votre panier.");
-        document.location.href = "./index.html";
+        document.location.href = "./index.html"; 
     } else {
         // Sinon, push les produits du panier dans allProducts.
         for (let i = 0; i < cart.length; i++) {
@@ -476,7 +465,7 @@ function checkCart() {
  * @param {array} contact 
  */
 function validateOrder(contact) {
-    // Declaration d'un objet contenant la synthaxe des coordonnees client + les produits choisis par celui-ci.
+    // Declaration d'un objet contenant les coordonnees client + les produits choisis par celui-ci.
     const order = {
         contact: contact,
         products: allProducts
@@ -498,7 +487,6 @@ function validateOrder(contact) {
         })
         .catch(function (error) {
             alert("Il y a une erreur" + error);
-            // console.log(error);
         })
 }
 
