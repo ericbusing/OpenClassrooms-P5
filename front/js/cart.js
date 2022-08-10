@@ -319,6 +319,28 @@ let emailRegex = new RegExp("^[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-z]{2,
 
 /*--------------------------------------------------------------------------FONCTIONS FORMULAIRE--------------------------------------------------------------------------*/
 
+function allInput() {
+    formCart.firstName.addEventListener("change", function () {
+        validFirstName();
+    });
+
+    formCart.lastName.addEventListener("change", function () {
+        validLastName();
+    });
+
+    formCart.address.addEventListener("change", function () {
+        validAddress();
+    });
+
+    formCart.city.addEventListener("change", function () {
+        validCity();
+    });
+
+    formCart.email.addEventListener("change", function () {
+        validEmail();
+    });
+}
+
 /**
  * Fonction pour l'input prenom.
  * @param {*} inputFirstName 
@@ -349,28 +371,6 @@ function validLastName() {
     } else {
         lastNameErrorMsg.textContent = "";
     }
-}
-
-function allInput() {
-    formCart.firstName.addEventListener("change", function () {
-        validFirstName();
-    });
-
-    formCart.lastName.addEventListener("change", function () {
-        validLastName();
-    });
-
-    formCart.address.addEventListener("change", function () {
-        validAddress();
-    });
-
-    formCart.city.addEventListener("change", function () {
-        validCity();
-    });
-
-    formCart.email.addEventListener("change", function () {
-        validEmail();
-    });
 }
 
 /**
