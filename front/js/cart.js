@@ -328,12 +328,13 @@ function validFirstName() {
     // Declaration d'une variable contenant le test Regex.
     let testFirstName = textRegex.test(inputFirstName);
     // Si le testRegex n'est pas bon.
-    if (testFirstName === false) {
+    if (!testFirstName) {
         // Alors afficher un message d'erreur.
         firstNameErrorMsg.textContent = 'Veuillez renseigner le champ "Prénom" correctement.';
     } else {
         firstNameErrorMsg.textContent = "";
     }
+    console.log(testFirstName);
 }
 
 /**
@@ -343,60 +344,13 @@ function validFirstName() {
 function validLastName() {
     let inputLastName = document.getElementById("lastName").value;
     let testLastName = textRegex.test(inputLastName);
-    if (testLastName === false) {
+    if (!testLastName) {
         lastNameErrorMsg.textContent = 'Veuillez renseigner le champ "Nom" correctement.';
     } else {
         lastNameErrorMsg.textContent = "";
     }
 }
 
-/**
- * Fonction pour l'input adresse.
- * @param {*} inputAddress 
- */
-function validAddress() {
-    let inputAddress = document.getElementById("address").value;
-    let testAddress = addressRegex.test(inputAddress);
-    if (testAddress === false) {
-        addressErrorMsg.textContent = 'Veuillez renseigner le champ "Adresse" correctement.';
-    } else {
-        addressErrorMsg.textContent = "";
-    }
-}
-
-/**
- * Fonction pour l'input ville.
- * @param {*} inputCity 
- */
-function validCity() {
-    let inputCity = document.getElementById("city").value;
-    let testCity = textRegex.test(inputCity);
-    if (testCity === false) {
-        cityErrorMsg.textContent = 'Veuillez renseigner le champ "Ville" correctement.';
-    } else {
-        cityErrorMsg.textContent = "";
-    }
-}
-
-/**
- * Fonction pour l'input email.
- * @param {*} inputEmail 
- */
-function validEmail() {
-    let inputEmail = document.getElementById("email").value;
-    let testEmail = emailRegex.test(inputEmail);
-    if (testEmail === false) {
-        emailErrorMsg.textContent = 'Veuillez renseigner le champ "Email" correctement. N\'oubliez pas l\'@.';
-    } else {
-        emailErrorMsg.textContent = "";
-    }
-}
-
-/*--------------------------------------------------------------------------EVENEMENTS FORMULAIRE--------------------------------------------------------------------------*/
-
-/**
- * Fonction d'ecoute regroupant tout les eventListener des inputs du formulaire.
- */
 function allInput() {
     formCart.firstName.addEventListener("change", function () {
         validFirstName();
@@ -418,6 +372,75 @@ function allInput() {
         validEmail();
     });
 }
+
+/**
+ * Fonction pour l'input adresse.
+ * @param {*} inputAddress 
+ */
+function validAddress() {
+    let inputAddress = document.getElementById("address").value;
+    let testAddress = addressRegex.test(inputAddress);
+    if (!testAddress) {
+        addressErrorMsg.textContent = 'Veuillez renseigner le champ "Adresse" correctement.';
+    } else {
+        addressErrorMsg.textContent = "";
+    }
+}
+
+/**
+ * Fonction pour l'input ville.
+ * @param {*} inputCity 
+ */
+function validCity() {
+    let inputCity = document.getElementById("city").value;
+    let testCity = textRegex.test(inputCity);
+    if (!testCity) {
+        cityErrorMsg.textContent = 'Veuillez renseigner le champ "Ville" correctement.';
+    } else {
+        cityErrorMsg.textContent = "";
+    }
+}
+
+/**
+ * Fonction pour l'input email.
+ * @param {*} inputEmail 
+ */
+function validEmail() {
+    let inputEmail = document.getElementById("email").value;
+    let testEmail = emailRegex.test(inputEmail);
+    if (!testEmail) {
+        emailErrorMsg.textContent = 'Veuillez renseigner le champ "Email" correctement. N\'oubliez pas l\'@.';
+    } else {
+        emailErrorMsg.textContent = "";
+    }
+}
+
+/*--------------------------------------------------------------------------EVENEMENTS FORMULAIRE--------------------------------------------------------------------------*/
+
+/**
+ * Fonction d'ecoute regroupant tout les eventListener des inputs du formulaire.
+ */
+// function allInput() {
+//     formCart.firstName.addEventListener("change", function () {
+//         validFirstName();
+//     });
+
+//     formCart.lastName.addEventListener("change", function () {
+//         validLastName();
+//     });
+
+//     formCart.address.addEventListener("change", function () {
+//         validAddress();
+//     });
+
+//     formCart.city.addEventListener("change", function () {
+//         validCity();
+//     });
+
+//     formCart.email.addEventListener("change", function () {
+//         validEmail();
+//     });
+// }
 
 /*--------------------------------------------------------------------------COMMANDE--------------------------------------------------------------------------*/
 
