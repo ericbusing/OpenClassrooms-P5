@@ -258,7 +258,6 @@ function listenChangeInput() {
             const dataColor = parent.dataset.color;
             const newQty = parseInt(event.target.value);
             // Appel de la fonction de changement de quantite, avec les constantes instentiees au-dessus, en parametre.
-            console.log(event);
             if (newQty > 0 && newQty <= 100) {
                 changeQuantity(dataId, dataColor, newQty);
             } else {
@@ -315,10 +314,94 @@ Le "^" désigne le début de la RegExp, les crochet le contenu de celle-ci et le
 Le "g" est un flag qui signifie que l'on veut chercher dans le global du formulaire.*/
 let textRegex = new RegExp("^([a-zA-Z,éêèàëÉÈÊË.'-]+[ ]?){3,}$");
 let addressRegex = new RegExp("^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
-let emailRegex = new RegExp("^[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-z]{2,10}$");
+let emailRegex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
 
 /*--------------------------------------------------------------------------FONCTIONS FORMULAIRE--------------------------------------------------------------------------*/
 
+/**
+ * Fonction pour l'input prenom.
+ * @param {*} inputFirstName 
+ */
+let testFirstName
+function validFirstName() {
+    let inputFirstName = document.getElementById("firstName").value;
+    // Declaration d'une variable contenant le test Regex.
+    testFirstName = textRegex.test(inputFirstName);
+    // Si le testRegex n'est pas bon.
+    if (!testFirstName) {
+        // Alors afficher un message d'erreur.
+        firstNameErrorMsg.textContent = 'Veuillez renseigner le champ "Prénom" correctement.';
+        return false;
+    } else {
+        firstNameErrorMsg.textContent = "";
+    }
+}
+
+/**
+ * Fonction pour l'input nom.
+ * @param {*} inputLastName 
+ */
+let testLastName;
+function validLastName() {
+    let inputLastName = document.getElementById("lastName").value;
+    testLastName = textRegex.test(inputLastName);
+    if (!testLastName) {
+        lastNameErrorMsg.textContent = 'Veuillez renseigner le champ "Nom" correctement.';
+    } else {
+        lastNameErrorMsg.textContent = "";
+    }
+}
+
+/**
+ * Fonction pour l'input adresse.
+ * @param {*} inputAddress 
+ */
+let testAddress;
+function validAddress() {
+    let inputAddress = document.getElementById("address").value;
+    testAddress = addressRegex.test(inputAddress);
+    if (!testAddress) {
+        addressErrorMsg.textContent = 'Veuillez renseigner le champ "Adresse" correctement.';
+    } else {
+        addressErrorMsg.textContent = "";
+    }
+}
+
+/**
+ * Fonction pour l'input ville.
+ * @param {*} inputCity 
+ */
+let testCity;
+function validCity() {
+    let inputCity = document.getElementById("city").value;
+    testCity = textRegex.test(inputCity);
+    if (!testCity) {
+        cityErrorMsg.textContent = 'Veuillez renseigner le champ "Ville" correctement.';
+    } else {
+        cityErrorMsg.textContent = "";
+    }
+}
+
+/**
+ * Fonction pour l'input email.
+ * @param {*} inputEmail 
+ */
+let testEmail;
+function validEmail() {
+    let inputEmail = document.getElementById("email").value;
+    testEmail = emailRegex.test(inputEmail);
+    if (!testEmail) {
+        emailErrorMsg.textContent = 'Veuillez renseigner le champ "Email" correctement. N\'oubliez pas l\'@.';
+    } else {
+        emailErrorMsg.textContent = "";
+    }
+}
+
+/*--------------------------------------------------------------------------EVENEMENTS FORMULAIRE--------------------------------------------------------------------------*/
+
+/**
+ * Fonction d'ecoute regroupant tout les eventListener des inputs du formulaire.
+ */
 function allInput() {
     formCart.firstName.addEventListener("change", function () {
         validFirstName();
@@ -341,107 +424,6 @@ function allInput() {
     });
 }
 
-/**
- * Fonction pour l'input prenom.
- * @param {*} inputFirstName 
- */
-function validFirstName() {
-    let inputFirstName = document.getElementById("firstName").value;
-    // Declaration d'une variable contenant le test Regex.
-    let testFirstName = textRegex.test(inputFirstName);
-    // Si le testRegex n'est pas bon.
-    if (!testFirstName) {
-        // Alors afficher un message d'erreur.
-        firstNameErrorMsg.textContent = 'Veuillez renseigner le champ "Prénom" correctement.';
-    } else {
-        firstNameErrorMsg.textContent = "";
-    }
-    console.log(testFirstName);
-}
-
-/**
- * Fonction pour l'input nom.
- * @param {*} inputLastName 
- */
-function validLastName() {
-    let inputLastName = document.getElementById("lastName").value;
-    let testLastName = textRegex.test(inputLastName);
-    if (!testLastName) {
-        lastNameErrorMsg.textContent = 'Veuillez renseigner le champ "Nom" correctement.';
-    } else {
-        lastNameErrorMsg.textContent = "";
-    }
-}
-
-/**
- * Fonction pour l'input adresse.
- * @param {*} inputAddress 
- */
-function validAddress() {
-    let inputAddress = document.getElementById("address").value;
-    let testAddress = addressRegex.test(inputAddress);
-    if (!testAddress) {
-        addressErrorMsg.textContent = 'Veuillez renseigner le champ "Adresse" correctement.';
-    } else {
-        addressErrorMsg.textContent = "";
-    }
-}
-
-/**
- * Fonction pour l'input ville.
- * @param {*} inputCity 
- */
-function validCity() {
-    let inputCity = document.getElementById("city").value;
-    let testCity = textRegex.test(inputCity);
-    if (!testCity) {
-        cityErrorMsg.textContent = 'Veuillez renseigner le champ "Ville" correctement.';
-    } else {
-        cityErrorMsg.textContent = "";
-    }
-}
-
-/**
- * Fonction pour l'input email.
- * @param {*} inputEmail 
- */
-function validEmail() {
-    let inputEmail = document.getElementById("email").value;
-    let testEmail = emailRegex.test(inputEmail);
-    if (!testEmail) {
-        emailErrorMsg.textContent = 'Veuillez renseigner le champ "Email" correctement. N\'oubliez pas l\'@.';
-    } else {
-        emailErrorMsg.textContent = "";
-    }
-}
-
-/*--------------------------------------------------------------------------EVENEMENTS FORMULAIRE--------------------------------------------------------------------------*/
-
-/**
- * Fonction d'ecoute regroupant tout les eventListener des inputs du formulaire.
- */
-// function allInput() {
-//     formCart.firstName.addEventListener("change", function () {
-//         validFirstName();
-//     });
-
-//     formCart.lastName.addEventListener("change", function () {
-//         validLastName();
-//     });
-
-//     formCart.address.addEventListener("change", function () {
-//         validAddress();
-//     });
-
-//     formCart.city.addEventListener("change", function () {
-//         validCity();
-//     });
-
-//     formCart.email.addEventListener("change", function () {
-//         validEmail();
-//     });
-// }
-
 /*--------------------------------------------------------------------------COMMANDE--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------VARIABLES COMMANDE--------------------------------------------------------------------------*/
@@ -456,15 +438,16 @@ let allProducts = [];
 /**
  * Fonction pour checker le formulaire.
  */
+
 function checkForm() {
-    let validateForm = validFirstName() && validLastName() && validAddress() && validCity() && validEmail();
-    // if (validFirstName() && validLastName() && validAddress() && validCity() && validEmail()) {
-        return true;
-    // }else{
-    //     alert("Veuillez remplir correctement tout les champs du formulaire avant de passer commande.");
-    //     // return false;
-    // }
+    validFirstName
+    validLastName
+    validAddress
+    validCity
+    validEmail 
 }
+
+
 
 /**
  * Fonction pour verifier le contenu du panier.
@@ -474,7 +457,7 @@ function checkCart() {
     if (cart.length <= 0) {
         // Afficher un message d'alerte redirigeant vers la page d'accueil.
         alert("Vous n'avez aucun article dans votre panier.");
-        document.location.href = "./index.html"; 
+        document.location.href = "./index.html";
     } else {
         // Sinon, push les produits du panier dans allProducts.
         for (let i = 0; i < cart.length; i++) {
@@ -520,12 +503,13 @@ function validateOrder(contact) {
  */
 function listenOrderButton() {
     orderButton.addEventListener("click", function (event) {
+        event.preventDefault();
         // Déclaration des constantes afin de recuperer les values des inputs.
-        const testFirstName = document.getElementById("firstName").value;
-        const testLastName = document.getElementById("lastName").value;
-        const testAddress = document.getElementById("address").value;
-        const testCity = document.getElementById("city").value;
-        const testEmail = document.getElementById("email").value;
+        const testFirstName2 = document.getElementById("firstName").value;
+        const testLastName2 = document.getElementById("lastName").value;
+        const testAddress2 = document.getElementById("address").value;
+        const testCity2 = document.getElementById("city").value;
+        const testEmail2 = document.getElementById("email").value;
         // Déclaration d'un objet contenant le resultat des inputs.
         const contact = {
             firstName: testFirstName,
@@ -535,14 +519,14 @@ function listenOrderButton() {
             email: testEmail
         }
         // Si les inputs sont correctements remplis.
-        if (testFirstName && testLastName && testAddress && testCity && testEmail) {
-            event.preventDefault();
-            if (checkForm()) {
+        if (testFirstName2 && testLastName2 && testAddress2 && testCity2 && testEmail2) {
+
+            if (testFirstName === true && testLastName === true && testAddress === true && testCity === true && testEmail === true) {
                 // Alors valider la commande.
                 validateOrder(contact);
             }
         } else {
-            // Sinon, afficher un message d'erreur et ne pas prendre la commande.
+            !checkForm()
             alert("Veuillez remplir tout les champs du formulaire avant de passer commande.");
         }
     })
